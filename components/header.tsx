@@ -15,15 +15,16 @@ const Header = () => {
 
         <p>
           {!session && (
-            <a
-              href="/api/auth/signin"
-              onClick={(e) => {
-                e.preventDefault();
-                signIn();
-              }}
-            >
-              <button className="signInButton">Sign in</button>
-            </a>
+            <Link href="/api/auth/signin">
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  signIn();
+                }}
+              >
+                <button className="signInButton">Sign in</button>
+              </a>
+            </Link>
           )}
           {session && (
             <>
@@ -32,15 +33,16 @@ const Header = () => {
                   profile
                 </a>
               </Link>
-              <a
-                href="/api/auth/signout"
-                onClick={(e) => {
-                  e.preventDefault();
-                  signOut();
-                }}
-              >
-                <button className="signOutButton">Sign out</button>
-              </a>
+              <Link href="/api/auth/signout">
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    signOut();
+                  }}
+                >
+                  <button className="signOutButton">Sign out</button>
+                </a>
+              </Link>
             </>
           )}
         </p>
