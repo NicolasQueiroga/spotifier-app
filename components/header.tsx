@@ -19,7 +19,9 @@ const Header = () => {
               <a
                 onClick={(e) => {
                   e.preventDefault();
-                  signIn();
+                  signIn('Spotify', {
+                    callbackUrl: `${window.location.origin}/user`,
+                  });
                 }}
               >
                 <button className="signInButton">Sign in</button>
@@ -28,9 +30,9 @@ const Header = () => {
           )}
           {session && (
             <>
-              <Link href="/profile">
+              <Link href="/user/search">
                 <a>
-                  profile
+                  Search
                 </a>
               </Link>
               <Link href="/api/auth/signout">

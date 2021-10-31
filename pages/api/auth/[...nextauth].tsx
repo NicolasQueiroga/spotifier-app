@@ -6,6 +6,7 @@ export default NextAuth({
         Providers.Spotify({
             clientId: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
+            scope: 'user-read-private,user-read-playback-state,user-read-recently-played,user-read-email,user-read-currently-playing,user-top-read',
         })
     ],
     callbacks: {
