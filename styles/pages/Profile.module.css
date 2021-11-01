@@ -1,0 +1,47 @@
+.pageContainer {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome {}
+
+.contentContainer {
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+}
+
+.artistsContainer, .tracksContainer {
+    height: 77vh;
+    width: 50vw;
+    overflow-y: auto;
+    padding: 30px;
+    display: flex;
+}
+
+.artistsContainer {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tracksContainer {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.artist, .track {
+    margin: 20px;
+}
+
+.artist {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.track {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

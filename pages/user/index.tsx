@@ -31,15 +31,31 @@ interface artistProps {
   genres: Array<string>;
   href: string;
   id: string;
-  images: Array<Object>;
+  images: Array<imageProps>;
   name: string;
   popularity: number;
   type: string;
   uri: string;
 }
 
+interface albumProps {
+  album_type: string;
+  artists: Array<artistProps>;
+  available_markets: Array<string>;
+  external_urls: Object;
+  href: string;
+  id: string;
+  images: Array<imageProps>;
+  name: string;
+  release_date: Date;
+  release_date_precision: string;
+  total_tracks: number;
+  type: string;
+  uri: string;
+}
+
 interface trackProps {
-  album: Object;
+  album: albumProps;
   artists: Array<artistProps>;
   available_markets: Array<string>;
   disc_number: number;
@@ -56,6 +72,12 @@ interface trackProps {
   track_number: number;
   type: string;
   uri: string;
+}
+
+interface imageProps {
+  heigth: number;
+  url: string;
+  width: number;
 }
 
 const Profile = () => {
@@ -125,29 +147,33 @@ const Profile = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {session && (
-        <div className={styles.container}>
-          <div className={styles.welcome}>
-            <h1>Welcome, {user?.display_name}!</h1>
-          </div>
-          <div className={styles.artistsContainer}>
-            <p>Top 10 Artists</p>
-            {topArtists?.map((a) => (
-              <div className={styles.artist} key={a.id}>
-                <img src={a.images[2].url} alt="Picture of the artist"/>
-                {a.name}
+        <>
+          <div className={styles.pageContainer}>
+            <div className={styles.welcome}>
+              <h1>Welcome, {user?.display_name}!</h1>
+            </div>
+            <div className={styles.contentContainer}>
+              <div className={styles.artistsContainer}>
+                <p>Top 10 Artists</p>
+                {topArtists?.map((a) => (
+                  <div className={styles.artist} key={a.id}>
+                    <img src={a.images[0].url} alt="Picture of the artist" />
+                    {a.name}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className={styles.tracksContainer}>
-            <p>Top 10 Tracks</p>
-            {topTracks?.map((a) => (
-              <div className={styles.track} key={a.id}>
-                <img src={a.album.images[2].url} alt="Picture of the album"/>
-                {a.name}
+              <div className={styles.tracksContainer}>
+                <p>Top 10 Tracks</p>
+                {topTracks?.map((a) => (
+                  <div className={styles.track} key={a.id}>
+                    <img src={a.album.images[0].url} alt="Picture of the album" />
+                    {a.name}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </Layout>
   );

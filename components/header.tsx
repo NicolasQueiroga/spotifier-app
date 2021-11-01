@@ -7,29 +7,30 @@ const Header = () => {
   return (
     <header>
       <nav>
-        <Link href="/">
-          <a className="logo">
-            <h1>Spotifier</h1>
-          </a>
-        </Link>
-
-        <p>
+        <>
           {!session && (
-            <Link href="/api/auth/signin">
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  signIn('Spotify', {
-                    callbackUrl: `${window.location.origin}/user`,
-                  });
-                }}
-              >
-                <button className="signInButton">Sign in</button>
-              </a>
-            </Link>
+            <>
+              <Link href="/api/auth/signin">
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    signIn('Spotify', {
+                      callbackUrl: `${window.location.origin}/user`,
+                    });
+                  }}
+                >
+                  <button>Sign in</button>
+                </a>
+              </Link>
+            </>
           )}
           {session && (
             <>
+              <Link href="/user">
+                <a className="logo">
+                  <h1>Spotifier</h1>
+                </a>
+              </Link>
               <Link href="/user/search">
                 <a>
                   Search
@@ -44,12 +45,12 @@ const Header = () => {
                     });
                   }}
                 >
-                  <button className="signOutButton">Sign out</button>
+                  <button>Sign out</button>
                 </a>
               </Link>
             </>
           )}
-        </p>
+        </>
       </nav>
     </header>
   );
