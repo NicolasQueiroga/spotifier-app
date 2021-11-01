@@ -39,7 +39,9 @@ const Header = () => {
                 <a
                   onClick={(e) => {
                     e.preventDefault();
-                    signOut();
+                    signOut({
+                      callbackUrl: `${window.location.origin}`,
+                    });
                   }}
                 >
                   <button className="signOutButton">Sign out</button>

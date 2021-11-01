@@ -18,7 +18,7 @@ const Search = () => {
 
 
     async function search(data: any) {
-        const spotify = await getSpotifyClient(session?.user?.accessToken);
+        const spotify = await getSpotifyClient();
 
         const body = {
             q: data['searchBar'] as string,
