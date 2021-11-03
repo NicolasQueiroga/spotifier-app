@@ -10,6 +10,12 @@ html, body {
   overflow: hidden
 }
 
+@media (max-width: 1000px) {
+  html, body {
+    overflow: auto;
+  }
+}
+
 body {
   font-family: 'Montserrat', sans-serif;
 }
@@ -26,7 +32,7 @@ h2 {
 p {
   font-size: 14px;
   font-weight: 100;
-  line-height: 20px;
+  /* line-height: 20px; */
   letter-spacing: 0.5px;
   margin: 30px 0 30px;
 }
@@ -107,4 +113,6 @@ img {
   opacity: 0.98;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   height: 150px;
+  width: 150px;
+  object-fit: cover;
 }

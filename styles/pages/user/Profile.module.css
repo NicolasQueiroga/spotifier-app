@@ -4,7 +4,19 @@
     flex-direction: column;
 }
 
-.welcome {}
+.welcome {
+    width: 45vw;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 40px 0px;
+    margin-left: 1vw;
+}
+
+.welcomeText {
+    font-size: 2.6rem;
+}
 
 .contentContainer {
     height: 100vh;
@@ -13,7 +25,7 @@
 }
 
 .artistsContainer, .tracksContainer {
-    height: 77vh;
+    height: 70vh;
     width: 50vw;
     overflow-y: auto;
     padding: 30px;
@@ -44,4 +56,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.name {
+    margin-left: 100px;
 }
