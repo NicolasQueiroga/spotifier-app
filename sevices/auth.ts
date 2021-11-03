@@ -1,11 +1,11 @@
 import { api } from "./api";
 
 export async function recoverUserInformation(token: string) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    const response = await api.get("/auth/restricted");
+  const response = await api.get("/auth/restricted");
 
-    return {
-        user: response.data,
-    };
+  return {
+    user: response.data,
+  };
 }

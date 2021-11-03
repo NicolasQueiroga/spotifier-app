@@ -1,23 +1,25 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600&display=swap");
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   height: 100vh;
-  overflow: hidden
+  overflow: hidden;
 }
 
 @media (max-width: 1000px) {
-  html, body {
+  html,
+  body {
     overflow: auto;
   }
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 h1 {
@@ -51,7 +53,7 @@ button {
   border-radius: 20px;
   border: 1px solid #180f10;
   background-color: #180f10;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 12px;
   font-weight: bold;
   padding: 12px 45px;
@@ -61,11 +63,13 @@ button {
   transition: transform 80ms ease-in;
 }
 
-button:active, img:active {
+button:active,
+img:active {
   transform: scale(0.944);
 }
 
-button:hover, img:hover {
+button:hover,
+img:hover {
   transform: scale(0.98);
 }
 
@@ -74,7 +78,7 @@ button:focus {
 }
 
 form {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +88,8 @@ form {
   text-align: center;
 }
 
-input, select {
+input,
+select {
   border-radius: 20px;
   background-color: #eee;
   border: none;

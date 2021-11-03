@@ -1,15 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import { useSession } from 'next-auth/client';
-import Layout from '../../components/layout';
-import Head from 'next/head'
-import styles from '../../styles/pages/user/Search.module.css'
-import { getSpotifyClient } from '../../sevices/spotify';
+import { useSession } from "next-auth/client";
+import Layout from "../../components/layout";
+import Head from "next/head";
+import styles from "../../styles/pages/user/Search.module.css";
+import { getSpotifyClient } from "../../sevices/spotify";
 import Router from "next/router";
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image'
-import { artistProps, trackProps, albumProps, imageProps } from '.';
-
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { artistProps, trackProps, albumProps, imageProps } from ".";
 
 interface playlistProps {
   collaborative: boolean;
@@ -37,19 +36,19 @@ interface baseProps {
 }
 
 interface albumsProps extends baseProps {
-  items: Array<albumProps>
+  items: Array<albumProps>;
 }
 
 interface artistsProps extends baseProps {
-  items: Array<artistProps>
+  items: Array<artistProps>;
 }
 
 interface playlistsProps extends baseProps {
-  items: Array<playlistProps>
+  items: Array<playlistProps>;
 }
 
 interface tracksProps extends baseProps {
-  items: Array<trackProps>
+  items: Array<trackProps>;
 }
 
 interface searchProps {
@@ -63,12 +62,14 @@ const Search = () => {
   const [session, loading] = useSession();
 
   const [searchVal, setSearch] = useState<searchProps>();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   useEffect(() => {
     async function loadSearch(searchText: string) {
       try {
         const spotify = await getSpotifyClient();
-        const response = await spotify.get(`/search?q=${searchText}&type=album,artist,playlist,track`);
+        const response = await spotify.get(
+          `/search?q=${searchText}&type=album,artist,playlist,track`
+        );
 
         console.log(response.data);
         setSearch(response.data);
@@ -88,7 +89,9 @@ const Search = () => {
     async function loadTopArtists() {
       try {
         const spotify = await getSpotifyClient();
-        const response = await spotify.get("me/top/artists?time_range=short_term&limit=10");
+        const response = await spotify.get(
+          "me/top/artists?time_range=short_term&limit=10"
+        );
 
         console.log(response.data.items);
         setTopArtists(response.data.items);
@@ -104,7 +107,9 @@ const Search = () => {
     async function loadTopTracks() {
       try {
         const spotify = await getSpotifyClient();
-        const response = await spotify.get("me/top/tracks?time_range=short_term&limit=10");
+        const response = await spotify.get(
+          "me/top/tracks?time_range=short_term&limit=10"
+        );
 
         console.log(response.data.items);
         setTopTracks(response.data.items);
@@ -116,7 +121,7 @@ const Search = () => {
   }, []);
 
   if (loading) return <div>loading...</div>;
-  if (!session) return (Router.push('/'));
+  if (!session) return Router.push("/");
 
   return (
     <Layout>
@@ -128,7 +133,12 @@ const Search = () => {
       {session && (
         <div className={styles.container}>
           <div className={styles.searchBarContainer}>
-            <input className={styles.searchBar} type="text" value={searchText} onChange={onSearchTextChange} />
+            <input
+              className={styles.searchBar}
+              type="text"
+              value={searchText}
+              onChange={onSearchTextChange}
+            />
           </div>
           <div className={styles.resultContainer}>
             <div className={styles.artistsContainer}>
@@ -139,8 +149,10 @@ const Search = () => {
                       <img src={a.images[0].url} alt="Picture of the artist" />
                       <p className={styles.name}>{a.name}</p>
                     </div>
-                  )
-                } catch (error) { console.log(error) }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
               })}
             </div>
             <div className={styles.albumsContainer}>
@@ -151,8 +163,10 @@ const Search = () => {
                       <img src={a.images[0].url} alt="Picture of the album" />
                       <p className={styles.name}>{a.name}</p>
                     </div>
-                  )
-                } catch (error) { console.log(error) }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
               })}
             </div>
             <div className={styles.playlistsContainer}>
@@ -160,11 +174,16 @@ const Search = () => {
                 try {
                   return (
                     <div key={a.id} className={styles.playlists}>
-                      <img src={a.images[0].url} alt="Picture of the playlist" />
+                      <img
+                        src={a.images[0].url}
+                        alt="Picture of the playlist"
+                      />
                       <p className={styles.name}>{a.name}</p>
                     </div>
-                  )
-                } catch (error) { console.log(error) }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
               })}
             </div>
             <div className={styles.tracksContainer}>
@@ -172,11 +191,16 @@ const Search = () => {
                 try {
                   return (
                     <div key={a.id} className={styles.tracks}>
-                      <img src={a.album.images[0].url} alt="Picture of the track album" />
+                      <img
+                        src={a.album.images[0].url}
+                        alt="Picture of the track album"
+                      />
                       <p className={styles.name}>{a.name}</p>
                     </div>
-                  )
-                } catch (error) { console.log(error) }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
               })}
             </div>
           </div>

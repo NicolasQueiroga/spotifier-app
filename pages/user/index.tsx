@@ -1,181 +1,185 @@
 /* eslint-disable @next/next/no-img-element */
-import { useSession } from 'next-auth/client';
-import Layout from '../../components/layout';
-import Head from 'next/head'
-import styles from '../../styles/pages/user/Profile.module.css'
-import { getSpotifyClient } from '../../sevices/spotify';
+import { useSession } from "next-auth/client";
+import Layout from "../../components/layout";
+import Head from "next/head";
+import styles from "../../styles/pages/user/Profile.module.css";
+import { getSpotifyClient } from "../../sevices/spotify";
 import Router from "next/router";
-import { useState, useEffect } from 'react';
-import Image from 'next/image'
-import { api } from '../../sevices/api';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { api } from "../../sevices/api";
 
 export interface userProps {
-	country: string;
-	display_name: string;
-	email: string;
-	explicit_content: string;
-	external_urls: Object;
-	followers: string;
-	href: string;
-	id: string;
-	images: string;
-	product: string;
-	type: string;
-	uri: string;
+  country: string;
+  display_name: string;
+  email: string;
+  explicit_content: string;
+  external_urls: Object;
+  followers: string;
+  href: string;
+  id: string;
+  images: string;
+  product: string;
+  type: string;
+  uri: string;
 }
 
 export interface artistProps {
-	external_urls: Object;
-	followers: Object;
-	genres: Array<string>;
-	href: string;
-	id: string;
-	images: Array<imageProps>;
-	name: string;
-	popularity: number;
-	type: string;
-	uri: string;
+  external_urls: Object;
+  followers: Object;
+  genres: Array<string>;
+  href: string;
+  id: string;
+  images: Array<imageProps>;
+  name: string;
+  popularity: number;
+  type: string;
+  uri: string;
 }
 
 export interface albumProps {
-	album_type: string;
-	artists: Array<artistProps>;
-	available_markets: Array<string>;
-	external_urls: Object;
-	href: string;
-	id: string;
-	images: Array<imageProps>;
-	name: string;
-	release_date: Date;
-	release_date_precision: string;
-	total_tracks: number;
-	type: string;
-	uri: string;
+  album_type: string;
+  artists: Array<artistProps>;
+  available_markets: Array<string>;
+  external_urls: Object;
+  href: string;
+  id: string;
+  images: Array<imageProps>;
+  name: string;
+  release_date: Date;
+  release_date_precision: string;
+  total_tracks: number;
+  type: string;
+  uri: string;
 }
 
 export interface trackProps {
-	album: albumProps;
-	artists: Array<artistProps>;
-	available_markets: Array<string>;
-	disc_number: number;
-	duration_ms: number;
-	explicit: boolean;
-	external_ids: string;
-	external_urls: string;
-	href: string;
-	id: string;
-	is_local: boolean;
-	name: string;
-	popularity: number;
-	preview_url: string;
-	track_number: number;
-	type: string;
-	uri: string;
+  album: albumProps;
+  artists: Array<artistProps>;
+  available_markets: Array<string>;
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_ids: string;
+  external_urls: string;
+  href: string;
+  id: string;
+  is_local: boolean;
+  name: string;
+  popularity: number;
+  preview_url: string;
+  track_number: number;
+  type: string;
+  uri: string;
 }
 
 export interface imageProps {
-	heigth: number;
-	url: string;
-	width: number;
+  heigth: number;
+  url: string;
+  width: number;
 }
 
 const Profile = () => {
-	const [session, loading] = useSession();
+  const [session, loading] = useSession();
 
-	const [user, setUser] = useState<userProps>();
-	useEffect(() => {
-		async function loadUser() {
-			try {
-				const spotify = await getSpotifyClient();
-				const response = await spotify.get("me");
+  const [user, setUser] = useState<userProps>();
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const spotify = await getSpotifyClient();
+        const response = await spotify.get("me");
 
-				console.log(response.data);
-				setUser(response.data);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		loadUser();
-	}, []);
+        console.log(response.data);
+        setUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadUser();
+  }, []);
 
-	const [topArtists, setTopArtists] = useState<Array<artistProps>>();
-	useEffect(() => {
-		async function loadTopArtists() {
-			try {
-				const spotify = await getSpotifyClient();
-				const response = await spotify.get("me/top/artists?time_range=short_term&limit=10");
+  const [topArtists, setTopArtists] = useState<Array<artistProps>>();
+  useEffect(() => {
+    async function loadTopArtists() {
+      try {
+        const spotify = await getSpotifyClient();
+        const response = await spotify.get(
+          "me/top/artists?time_range=short_term&limit=10"
+        );
 
-				console.log(response.data.items);
-				setTopArtists(response.data.items);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		loadTopArtists();
-	}, []);
+        console.log(response.data.items);
+        setTopArtists(response.data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadTopArtists();
+  }, []);
 
-	const [topTracks, setTopTracks] = useState<Array<trackProps>>();
-	useEffect(() => {
-		async function loadTopTracks() {
-			try {
-				const spotify = await getSpotifyClient();
-				const response = await spotify.get("me/top/tracks?time_range=short_term&limit=10");
+  const [topTracks, setTopTracks] = useState<Array<trackProps>>();
+  useEffect(() => {
+    async function loadTopTracks() {
+      try {
+        const spotify = await getSpotifyClient();
+        const response = await spotify.get(
+          "me/top/tracks?time_range=short_term&limit=10"
+        );
 
-				console.log(response.data.items);
-				setTopTracks(response.data.items);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		loadTopTracks();
-	}, []);
+        console.log(response.data.items);
+        setTopTracks(response.data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadTopTracks();
+  }, []);
 
+  if (loading) return <div>loading...</div>;
+  if (!session) return Router.push("/");
 
-
-	if (loading) return <div>loading...</div>;
-	if (!session) return (Router.push('/'));
-
-
-
-
-	return (
-		<Layout>
-			<Head>
-				<title>Spotifier</title>
-				<meta name="description" content="Generated by create next app" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			{session && (
-				<>
-					<div className={styles.pageContainer}>
-						<div className={styles.welcome}>
-							<p className={styles.welcomeText}>Welcome, <strong>{user?.display_name}</strong>!</p>
-						</div>
-						<div className={styles.contentContainer}>
-							<div className={styles.artistsContainer}>
-								<p>Top 10 Artists</p>
-								{topArtists?.map((a) => (
-									<div className={styles.artist} key={a.id}>
-										<img src={a.images[0].url} alt="Picture of the artist" />
-										<p className={styles.name}>{a.name}</p>
-									</div>
-								))}
-							</div>
-							<div className={styles.tracksContainer}>
-								<p>Top 10 Tracks</p>
-								{topTracks?.map((a) => (
-									<div className={styles.track} key={a.id}>
-										<img src={a.album.images[0].url} alt="Picture of the album" />
-										<p className={styles.name}>{a.name}</p>
-									</div>
-								))}
-							</div>
-						</div>
-					</div>
-				</>
-			)}
-		</Layout>
-	);
+  return (
+    <Layout>
+      <Head>
+        <title>Spotifier</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {session && (
+        <>
+          <div className={styles.pageContainer}>
+            <div className={styles.welcome}>
+              <p className={styles.welcomeText}>
+                Welcome, <strong>{user?.display_name}</strong>!
+              </p>
+            </div>
+            <div className={styles.contentContainer}>
+              <div className={styles.artistsContainer}>
+                <p>Top 10 Artists</p>
+                {topArtists?.map((a) => (
+                  <div className={styles.artist} key={a.id}>
+                    <img src={a.images[0].url} alt="Picture of the artist" />
+                    <p className={styles.name}>{a.name}</p>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.tracksContainer}>
+                <p>Top 10 Tracks</p>
+                {topTracks?.map((a) => (
+                  <div className={styles.track} key={a.id}>
+                    <img
+                      src={a.album.images[0].url}
+                      alt="Picture of the album"
+                    />
+                    <p className={styles.name}>{a.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </Layout>
+  );
 };
 
 export default Profile;

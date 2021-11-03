@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import styles from '../styles/components/Layout.module.css'
-import Header from '../components/header';
+import Head from "next/head";
+import styles from "../styles/components/Layout.module.css";
+import Header from "../components/header";
 
 const Layout = ({ children }: any) => (
   <>

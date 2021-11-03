@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import styles from '../styles/components/Header.module.css'
-import { signIn, signOut, useSession } from 'next-auth/client';
+import Link from "next/link";
+import styles from "../styles/components/Header.module.css";
+import { signIn, signOut, useSession } from "next-auth/client";
 
 const Header = () => {
   const [session, loading] = useSession();
@@ -20,7 +20,7 @@ const Header = () => {
                 <a
                   onClick={(e) => {
                     e.preventDefault();
-                    signIn('Spotify', {
+                    signIn("Spotify", {
                       callbackUrl: `${window.location.origin}/user`,
                     });
                   }}
@@ -39,9 +39,7 @@ const Header = () => {
                   </a>
                 </Link>
                 <Link href="/user/search">
-                  <a className={styles.search}>
-                    Search
-                  </a>
+                  <a className={styles.search}>Search</a>
                 </Link>
               </div>
               <Link href="/api/auth/signout">
