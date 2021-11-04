@@ -120,6 +120,18 @@ const Search = () => {
     loadTopTracks();
   }, []);
 
+  function showContent() {
+    if (searchText.length >= 0) {
+      var e = document.getElementById("resultContainer") as any;
+      e.style.display = "flex";
+      var s = document.getElementById("searchBar") as any;
+      s.style.marginTop = "4vh";
+
+      var elms = document.querySelectorAll("[id='title']") as any;
+      for (var i = 0; i < elms.length; i++) elms[i].style.display = "unset";
+    }
+  }
+
   if (loading) return <div>loading...</div>;
   if (!session) return Router.push("/");
 
@@ -132,20 +144,24 @@ const Search = () => {
       </Head>
       {session && (
         <div className={styles.container}>
-          <div className={styles.searchBarContainer}>
+          <div className={styles.searchBarContainer} id="searchBar">
             <input
               className={styles.searchBar}
               type="text"
               value={searchText}
               onChange={onSearchTextChange}
+              onInput={showContent}
             />
           </div>
-          <div className={styles.resultContainer}>
+          <div className={styles.resultContainer} id="resultContainer">
             <div className={styles.artistsContainer}>
+              <p className={styles.title} id="title">
+                Artists
+              </p>
               {searchVal?.artists?.items?.map((a) => {
                 try {
                   return (
-                    <div className={styles.artist} key={a.id}>
+                    <div key={a.id} className={styles.artists}>
                       <img src={a.images[0].url} alt="Picture of the artist" />
                       <p className={styles.name}>{a.name}</p>
                     </div>
@@ -156,6 +172,9 @@ const Search = () => {
               })}
             </div>
             <div className={styles.albumsContainer}>
+              <p className={styles.title} id="title">
+                Albums
+              </p>
               {searchVal?.albums?.items?.map((a) => {
                 try {
                   return (
@@ -170,6 +189,9 @@ const Search = () => {
               })}
             </div>
             <div className={styles.playlistsContainer}>
+              <p className={styles.title} id="title">
+                Playlists
+              </p>
               {searchVal?.playlists?.items?.map((a) => {
                 try {
                   return (
@@ -187,6 +209,9 @@ const Search = () => {
               })}
             </div>
             <div className={styles.tracksContainer}>
+              <p className={styles.title} id="title">
+                Tracks
+              </p>
               {searchVal?.tracks?.items?.map((a) => {
                 try {
                   return (
