@@ -1,9 +1,12 @@
 import Link from "next/link";
 import styles from "../styles/components/Header.module.css";
 import { signIn, signOut, useSession } from "next-auth/client";
+import { useRouter } from 'next/router';
 
 const Header = () => {
   const [session, loading] = useSession();
+  const { asPath, pathname } = useRouter();
+  const endpoint = asPath.split('/');
 
   return (
     <header>
@@ -11,11 +14,13 @@ const Header = () => {
         <>
           {!session && (
             <div className={styles.header}>
-              <Link href="/">
-                <a className={styles.logo}>
-                  <h1>Spotifier</h1>
-                </a>
-              </Link>
+              <div className={styles.navbar}>
+                <Link href="/">
+                  <a className={styles.logo}>
+                    <h1>Spotifier</h1>
+                  </a>
+                </Link>
+              </div>
               <Link href="/api/auth/signin">
                 <a
                   onClick={(e) => {
@@ -38,9 +43,11 @@ const Header = () => {
                     <h1>Spotifier</h1>
                   </a>
                 </Link>
-                <Link href="/user/search">
-                  <a className={styles.search}>Search</a>
-                </Link>
+                {endpoint[endpoint.length - 1] !== 'search' && (
+                  <Link href="/user/search">
+                    <a className={styles.search}>Search</a>
+                  </Link>
+                )}
               </div>
               <Link href="/api/auth/signout">
                 <a
