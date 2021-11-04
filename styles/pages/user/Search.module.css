@@ -13,8 +13,7 @@
   min-width: 160px;
 }
 
-.searchBar {
-}
+.searchBar {}
 
 .resultContainer {
   margin-top: 17vh;
@@ -37,22 +36,21 @@
   }
 }
 
-.artistsContainer,
-.albumsContainer,
-.playlistsContainer,
-.tracksContainer {
+.artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
   width: 21.5vw;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border-radius: 7px;
-  display: flex;
+  display: inherit;
   flex-direction: column;
   align-items: flex-start;
-  background-image: linear-gradient(
-    to bottom,
-    rgb(253 253 253),
-    rgb(0 0 0 / 78%)
-  );
+  background-image: linear-gradient( to bottom, rgb(253 253 253), rgb(0 0 0 / 78%));
+  transition: cubic-bezier(0.78, 0.15, 0.44, 0.99);
+  transition: all 700ms;
+}
+
+.artistsContainer:hover, .albumsContainer:hover, .playlistsContainer:hover, .tracksContainer:hover {
+  transform: scale(0.99);
 }
 
 .title {
@@ -62,12 +60,9 @@
   display: none;
 }
 
-.artists,
-.albums,
-.playlists,
-.tracks {
+.artists, .albums, .playlists, .tracks {
   width: inherit;
-  display: flex;
+  display: inherit;
   align-items: center;
   justify-content: flex-start;
   margin: 2vh 1vw;
@@ -80,20 +75,29 @@
 
 .name {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin: 0vh 2vw;
 }
 
-.artists {
+.artists {}
+
+.albums {}
+
+.playlists {}
+
+.tracks {}
+
+.img {
+  height: 60px;
+  width: 60px;
 }
 
-.albums {
-}
-
-.playlists {
-}
-
-.tracks {
+.noSession {
+  width: 100vw;
+  height: 40vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 @keyframes fadein {
