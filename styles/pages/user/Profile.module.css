@@ -24,7 +24,8 @@
   justify-content: space-around;
 }
 
-.artistsContainer, .tracksContainer {
+.artistsContent,
+.tracksContent {
   height: 70vh;
   width: 50vw;
   overflow-y: auto;
@@ -37,17 +38,18 @@
   width: 60px;
 }
 
-.artistsContainer {
+.artistsContent {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.tracksContainer {
+.tracksContent {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.artist, .track {
+.artist,
+.track {
   margin: 20px;
 }
 

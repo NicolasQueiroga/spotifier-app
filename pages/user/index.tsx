@@ -184,7 +184,14 @@ const Profile = () => {
         )}
       </Layout>
     );
-  if (!session) return (<Layout><div className={styles.noSession}><h1>No Session!</h1></div></Layout>);
+  if (!session)
+    return (
+      <Layout>
+        <div className={styles.noSession}>
+          <h1>No Session!</h1>
+        </div>
+      </Layout>
+    );
 };
 
 export default Profile;

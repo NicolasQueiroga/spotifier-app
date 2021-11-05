@@ -1,12 +1,12 @@
 import Link from "next/link";
 import styles from "../styles/components/Header.module.css";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [session, loading] = useSession();
   const { asPath, pathname } = useRouter();
-  const endpoint = asPath.split('/');
+  const endpoint = asPath.split("/");
 
   return (
     <header>
@@ -43,7 +43,7 @@ const Header = () => {
                     <h1>Spotifier</h1>
                   </a>
                 </Link>
-                {endpoint[endpoint.length - 1] !== 'search' && (
+                {endpoint[endpoint.length - 1] !== "search" && (
                   <Link href="/user/search">
                     <a className={styles.search}>Search</a>
                   </Link>
