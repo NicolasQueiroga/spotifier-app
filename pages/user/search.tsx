@@ -130,25 +130,23 @@ const Search = () => {
   }
 
   function expandArtist() {
-    expand("artistsContainer");
+    expand("artistsContainer", 'artists');
   }
   function expandAlbum() {
-    expand("albumsContainer");
+    expand("albumsContainer", 'albums');
   }
   function expandPlaylist() {
-    expand("playlistsContainer");
+    expand("playlistsContainer", 'playlists');
   }
   function expandTrack() {
-    expand("tracksContainer");
+    expand("tracksContainer", 'tracks');
   }
 
-  function expand(id: string) {
+  function expand(id1: string, id2: string) {
     setExpanded(true);
-    var containerElement = document.getElementById(
-      "resultContainer"
-    ) as HTMLElement;
+    var containerElement = document.getElementById("resultContainer") as HTMLElement;
     containerElement.style.cssText = `display: flex;
-    height: 60vh;`;
+                                      height: 60vh;`;
 
     var elms = document.querySelectorAll(
       "[id='img']"
@@ -156,32 +154,53 @@ const Search = () => {
     for (var i = 0; i < elms.length; i++)
       elms[i].style.cssText = `height: 250px; width: 250px;`;
 
-    let ids = [
+    let ids1 = [
       "artistsContainer",
       "albumsContainer",
       "playlistsContainer",
       "tracksContainer"
     ];
-    var e1 = document.getElementById(ids[0]) as HTMLElement;
-    var e2 = document.getElementById(ids[1]) as HTMLElement;
-    var e3 = document.getElementById(ids[2]) as HTMLElement;
-    var e4 = document.getElementById(ids[3]) as HTMLElement;
-    var e5 = document.getElementById(ids[4]) as HTMLElement;
-    const l = [e1, e2, e3, e4, e5];
-    let show = 0;
+    var e1 = document.getElementById(ids1[0]) as HTMLElement;
+    var e2 = document.getElementById(ids1[1]) as HTMLElement;
+    var e3 = document.getElementById(ids1[2]) as HTMLElement;
+    var e4 = document.getElementById(ids1[3]) as HTMLElement;
+    var e5 = document.getElementById(ids1[4]) as HTMLElement;
+    const l1 = [e1, e2, e3, e4, e5];
+    let show1 = 0;
     for (let i = 0; i < 4; i++) {
-      if (id === ids[i]) show = i;
-      else {
-        l[i].style.display = "none";
-      }
+      if (id1 === ids1[i]) show1 = i;
+      else l1[i].style.display = "none";
     }
-    l[show].style.cssText = `display: flex;
-                                width: 72vw; 
-                                height: 58vh; 
-                                transform: none; 
-                                overflow-y: auto; 
-                                maxHeight: none; 
-                                minHeight: none;`;
+
+    let ids2 = [
+      "artists",
+      "albums",
+      "playlists",
+      "tracks"
+    ];
+    var e1 = document.getElementById(ids2[0]) as HTMLElement;
+    var e2 = document.getElementById(ids2[1]) as HTMLElement;
+    var e3 = document.getElementById(ids2[2]) as HTMLElement;
+    var e4 = document.getElementById(ids2[3]) as HTMLElement;
+    var e5 = document.getElementById(ids2[4]) as HTMLElement;
+    const l2 = [e1, e2, e3, e4, e5];
+    let show2 = 0;
+    for (let i = 0; i < 4; i++) {
+      if (id2 === ids2[i]) show2 = i;
+      else l2[i].style.display = "none";
+    }
+
+    l1[show1].style.cssText = `display: flex;
+                             width: 72vw; 
+                             height: 58vh; 
+                             transform: none; 
+                             overflow-y: auto; 
+                             maxHeight: none; 
+                             minHeight: none;
+                             flex-wrap: nowrap;
+                             flex-direction: column;`;
+
+    l2[show2].style.cssText = `display: flex;`;
 
     var elms = document.querySelectorAll(
       "[id='title']"
@@ -214,7 +233,6 @@ const Search = () => {
             <div className={styles.clickHere} onClick={mainContent}></div>
             <div className={styles.resultContainer} id="resultContainer">
               <div className={styles.box}>
-
                 <p className={styles.title} id="title">
                   Artists
                 </p>
@@ -225,18 +243,34 @@ const Search = () => {
                 >
                   {searchVal?.artists?.items?.map((a) => {
                     try {
+                      if (!expanded)
+                        return (
+                          <>
+                            <div key={a.id} className={styles.artists}>
+                              <img
+                                className={styles.img}
+                                src={a.images[0].url}
+                                alt="Picture of the artist"
+                                id="img"
+                              />
+                            </div>
+                          </>
+                        );
                       return (
                         <>
-                          <div key={a.id} className={styles.artists}>
+                          <div key={a.id} className={styles.artists} id='artists'>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
                               alt="Picture of the artist"
                               id="img"
                             />
+                            <div className={styles.content} id='content'>
+                              <p>{a.name}</p>
+                            </div>
                           </div>
                         </>
-                      );
+                      )
                     } catch (error) {
                       console.log(error);
                     }
@@ -254,6 +288,17 @@ const Search = () => {
                 >
                   {searchVal?.albums?.items?.map((a) => {
                     try {
+                      if (!expanded)
+                        return (
+                          <div key={a.id} className={styles.albums} id='albums'>
+                            <img
+                              className={styles.img}
+                              src={a.images[0].url}
+                              alt="Picture of the album"
+                              id="img"
+                            />
+                          </div>
+                        );
                       return (
                         <div key={a.id} className={styles.albums}>
                           <img
@@ -262,6 +307,9 @@ const Search = () => {
                             alt="Picture of the album"
                             id="img"
                           />
+                          <div className={styles.content} id='content'>
+                            <p>{a.name}</p>
+                          </div>
                         </div>
                       );
                     } catch (error) {
@@ -281,6 +329,17 @@ const Search = () => {
                 >
                   {searchVal?.playlists?.items?.map((a) => {
                     try {
+                      if (!expanded)
+                        return (
+                          <div key={a.id} className={styles.playlists} id='playlists'>
+                            <img
+                              className={styles.img}
+                              src={a.images[0].url}
+                              alt="Picture of the playlist"
+                              id="img"
+                            />
+                          </div>
+                        );
                       return (
                         <div key={a.id} className={styles.playlists}>
                           <img
@@ -289,8 +348,11 @@ const Search = () => {
                             alt="Picture of the playlist"
                             id="img"
                           />
+                          <div className={styles.content} id='content'>
+                            <p>{a.name}</p>
+                          </div>
                         </div>
-                      );
+                      )
                     } catch (error) {
                       console.log(error);
                     }
@@ -308,6 +370,17 @@ const Search = () => {
                 >
                   {searchVal?.tracks?.items?.map((a) => {
                     try {
+                      if (!expanded)
+                        return (
+                          <div key={a.id} className={styles.tracks} id='tracks'>
+                            <img
+                              className={styles.img}
+                              src={a.album.images[0].url}
+                              alt="Picture of the track album"
+                              id="img"
+                            />
+                          </div>
+                        );
                       return (
                         <div key={a.id} className={styles.tracks}>
                           <img
@@ -316,6 +389,9 @@ const Search = () => {
                             alt="Picture of the track album"
                             id="img"
                           />
+                          <div className={styles.content} id='content'>
+                            <p>{a.name}</p>
+                          </div>
                         </div>
                       );
                     } catch (error) {

@@ -33,8 +33,9 @@
 }
 
 .artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
-  width: 21.5vw;
+  width: 21.2vw;
   height: 53vh;
+  padding-top: 10px;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border-radius: 7px;
@@ -82,6 +83,10 @@
   -ms-animation: fadein 1s;
   -o-animation: fadein 1s;
   animation: fadein 1s;
+}
+
+.content {
+  display: none;
 }
 
 .clickHere {
