@@ -107,6 +107,7 @@ const Search = () => {
       var e3 = document.getElementById("albumsContainer") as HTMLElement;
       var e4 = document.getElementById("playlistsContainer") as HTMLElement;
       var e5 = document.getElementById("tracksContainer") as HTMLElement;
+
       var elms = document.querySelectorAll(
         "[id='img']"
       ) as NodeListOf<HTMLElement>;
@@ -123,7 +124,7 @@ const Search = () => {
       var elms = document.querySelectorAll(
         "[id='title']"
       ) as NodeListOf<HTMLElement>;
-      for (var i = 0; i < elms.length; i++) elms[i].style.display = "unset";
+      for (var i = 0; i < elms.length; i++) elms[i].style.display = 'unset';
       setExpanded(false);
     }
   }
@@ -159,7 +160,7 @@ const Search = () => {
       "artistsContainer",
       "albumsContainer",
       "playlistsContainer",
-      "tracksContainer",
+      "tracksContainer"
     ];
     var e1 = document.getElementById(ids[0]) as HTMLElement;
     var e2 = document.getElementById(ids[1]) as HTMLElement;
@@ -183,15 +184,10 @@ const Search = () => {
                                 minHeight: none;`;
 
     var elms = document.querySelectorAll(
-      "[id='artist']"
+      "[id='title']"
     ) as NodeListOf<HTMLElement>;
     for (var i = 0; i < elms.length; i++)
-      elms[i].style.cssText = `
-    display: flex;
-    margin-left: 25vw;
-    height: 26vh;
-    flex-direction: row;
-    align-items: baseline;`;
+      elms[i].style.display = "none";
   }
 
   if (loading) return <div>loading...</div>;
@@ -217,107 +213,116 @@ const Search = () => {
             </div>
             <div className={styles.clickHere} onClick={mainContent}></div>
             <div className={styles.resultContainer} id="resultContainer">
-              <div
-                className={styles.artistsContainer}
-                id="artistsContainer"
-                onClick={expandArtist}
-              >
+              <div className={styles.box}>
+
                 <p className={styles.title} id="title">
                   Artists
                 </p>
-                {searchVal?.artists?.items?.map((a) => {
-                  try {
-                    return (
-                      <>
-                        <div key={a.id} className={styles.artists}>
-                          <img
-                            className={styles.img}
-                            src={a.images[0].url}
-                            alt="Picture of the artist"
-                            id="img"
-                          />
-                        </div>
-                      </>
-                    );
-                  } catch (error) {
-                    console.log(error);
-                  }
-                })}
+                <div
+                  className={styles.artistsContainer}
+                  id="artistsContainer"
+                  onClick={expandArtist}
+                >
+                  {searchVal?.artists?.items?.map((a) => {
+                    try {
+                      return (
+                        <>
+                          <div key={a.id} className={styles.artists}>
+                            <img
+                              className={styles.img}
+                              src={a.images[0].url}
+                              alt="Picture of the artist"
+                              id="img"
+                            />
+                          </div>
+                        </>
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  })}
+                </div>
               </div>
-              <div
-                className={styles.albumsContainer}
-                id="albumsContainer"
-                onClick={expandAlbum}
-              >
+              <div className={styles.box}>
                 <p className={styles.title} id="title">
                   Albums
                 </p>
-                {searchVal?.albums?.items?.map((a) => {
-                  try {
-                    return (
-                      <div key={a.id} className={styles.albums}>
-                        <img
-                          className={styles.img}
-                          src={a.images[0].url}
-                          alt="Picture of the album"
-                          id="img"
-                        />
-                      </div>
-                    );
-                  } catch (error) {
-                    console.log(error);
-                  }
-                })}
+                <div
+                  className={styles.albumsContainer}
+                  id="albumsContainer"
+                  onClick={expandAlbum}
+                >
+                  {searchVal?.albums?.items?.map((a) => {
+                    try {
+                      return (
+                        <div key={a.id} className={styles.albums}>
+                          <img
+                            className={styles.img}
+                            src={a.images[0].url}
+                            alt="Picture of the album"
+                            id="img"
+                          />
+                        </div>
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  })}
+                </div>
               </div>
-              <div
-                className={styles.playlistsContainer}
-                id="playlistsContainer"
-                onClick={expandPlaylist}
-              >
+              <div className={styles.box}>
                 <p className={styles.title} id="title">
                   Playlists
                 </p>
-                {searchVal?.playlists?.items?.map((a) => {
-                  try {
-                    return (
-                      <div key={a.id} className={styles.playlists}>
-                        <img
-                          className={styles.img}
-                          src={a.images[0].url}
-                          alt="Picture of the playlist"
-                          id="img"
-                        />
-                      </div>
-                    );
-                  } catch (error) {
-                    console.log(error);
-                  }
-                })}
+                <div
+                  className={styles.playlistsContainer}
+                  id="playlistsContainer"
+                  onClick={expandPlaylist}
+                >
+                  {searchVal?.playlists?.items?.map((a) => {
+                    try {
+                      return (
+                        <div key={a.id} className={styles.playlists}>
+                          <img
+                            className={styles.img}
+                            src={a.images[0].url}
+                            alt="Picture of the playlist"
+                            id="img"
+                          />
+                        </div>
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  })}
+                </div>
               </div>
-              <div
-                className={styles.tracksContainer}
-                id="tracksContainer"
-                onClick={expandTrack}
-              >
+              <div className={styles.box}>
                 <p className={styles.title} id="title">
                   Tracks
                 </p>
-                {searchVal?.tracks?.items?.map((a) => {
-                  try {
-                    return (
-                      <div key={a.id} className={styles.tracks}>
-                        <img
-                          className={styles.img}
-                          src={a.album.images[0].url}
-                          alt="Picture of the track album"
-                          id="img"
-                        />
-                      </div>
-                    );
-                  } catch (error) {
-                    console.log(error);
-                  }
-                })}
+                <div
+                  className={styles.tracksContainer}
+                  id="tracksContainer"
+                  onClick={expandTrack}
+                >
+                  {searchVal?.tracks?.items?.map((a) => {
+                    try {
+                      return (
+                        <div key={a.id} className={styles.tracks}>
+                          <img
+                            className={styles.img}
+                            src={a.album.images[0].url}
+                            alt="Picture of the track album"
+                            id="img"
+                          />
+                        </div>
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  })}
+                </div>
               </div>
             </div>
           </div>
