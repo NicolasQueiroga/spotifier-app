@@ -6,83 +6,13 @@ import styles from "../../styles/pages/user/Profile.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import Router from "next/router";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { api } from "../../sevices/api";
 
-export interface userProps {
-  country: string;
-  display_name: string;
-  email: string;
-  explicit_content: string;
-  external_urls: Object;
-  followers: string;
-  href: string;
-  id: string;
-  images: string;
-  product: string;
-  type: string;
-  uri: string;
-}
-
-export interface artistProps {
-  external_urls: Object;
-  followers: Object;
-  genres: Array<string>;
-  href: string;
-  id: string;
-  images: Array<imageProps>;
-  name: string;
-  popularity: number;
-  type: string;
-  uri: string;
-}
-
-export interface albumProps {
-  album_type: string;
-  artists: Array<artistProps>;
-  available_markets: Array<string>;
-  external_urls: Object;
-  href: string;
-  id: string;
-  images: Array<imageProps>;
-  name: string;
-  release_date: Date;
-  release_date_precision: string;
-  total_tracks: number;
-  type: string;
-  uri: string;
-}
-
-export interface trackProps {
-  album: albumProps;
-  artists: Array<artistProps>;
-  available_markets: Array<string>;
-  disc_number: number;
-  duration_ms: number;
-  explicit: boolean;
-  external_ids: string;
-  external_urls: string;
-  href: string;
-  id: string;
-  is_local: boolean;
-  name: string;
-  popularity: number;
-  preview_url: string;
-  track_number: number;
-  type: string;
-  uri: string;
-}
-
-export interface imageProps {
-  heigth: number;
-  url: string;
-  width: number;
-}
 
 const Profile = () => {
   const [session, loading] = useSession();
 
-  const [user, setUser] = useState<userProps>();
+  const [user, setUser] = useState<UserProps>();
   useEffect(() => {
     async function loadUser() {
       try {
@@ -98,7 +28,7 @@ const Profile = () => {
     loadUser();
   }, []);
 
-  const [topArtists, setTopArtists] = useState<Array<artistProps>>();
+  const [topArtists, setTopArtists] = useState<Array<ArtistProps>>();
   useEffect(() => {
     async function loadTopArtists() {
       try {
@@ -116,7 +46,7 @@ const Profile = () => {
     loadTopArtists();
   }, []);
 
-  const [topTracks, setTopTracks] = useState<Array<trackProps>>();
+  const [topTracks, setTopTracks] = useState<Array<TrackProps>>();
   useEffect(() => {
     async function loadTopTracks() {
       try {

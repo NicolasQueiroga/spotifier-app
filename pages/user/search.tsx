@@ -2,58 +2,11 @@
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
+import Link from "next/link";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
-import { artistProps, trackProps, albumProps, imageProps } from ".";
 
-interface playlistProps {
-  collaborative: boolean;
-  description: string;
-  external_urls: Object;
-  href: string;
-  id: string;
-  images: Array<imageProps>;
-  name: string;
-  owner: Object;
-  primary_color: any;
-  public: boolean;
-  snapshot_id: string;
-  tracks: Object;
-  type: string;
-  uri: string;
-}
-interface baseProps {
-  href: string;
-  limit: number;
-  next: string;
-  ofset: number;
-  previous: string;
-  total: number;
-}
-
-interface albumsProps extends baseProps {
-  items: Array<albumProps>;
-}
-
-interface artistsProps extends baseProps {
-  items: Array<artistProps>;
-}
-
-interface playlistsProps extends baseProps {
-  items: Array<playlistProps>;
-}
-
-interface tracksProps extends baseProps {
-  items: Array<trackProps>;
-}
-
-interface searchProps {
-  albums: albumsProps;
-  artists: artistsProps;
-  playlists: playlistsProps;
-  tracks: tracksProps;
-}
 
 const Search = () => {
   const [session, loading] = useSession();
@@ -61,7 +14,7 @@ const Search = () => {
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const [searchVal, setSearch] = useState<searchProps>();
+  const [searchVal, setSearch] = useState<SearchProps>();
   const [searchText, setSearchText] = useState("");
   useEffect(() => {
     async function loadSearch(searchText: string) {
@@ -158,7 +111,8 @@ const Search = () => {
     setExpanded(true);
     var containerElement = document.getElementById("resultContainer") as HTMLElement;
     containerElement.style.cssText = `display: flex;
-                                      height: 60vh;`;
+                                      height: 60vh;
+                                      flex-direction: column;`;
 
     var elms = document.querySelectorAll(
       "[id='img']"
@@ -183,26 +137,6 @@ const Search = () => {
       if (id1 === ids1[i]) show1 = i;
       else l1[i].style.display = "none";
     }
-
-    let ids2 = [
-      "artists",
-      "albums",
-      "playlists",
-      "tracks"
-    ];
-
-    let show2 = 0;
-    for (let i = 0; i < 4; i++) {
-      if (id2 === ids2[i]) show2 = i;
-      else {
-        var elms = document.querySelectorAll(
-          `[id='${ids2[i]}']`
-        ) as NodeListOf<HTMLElement>;
-        for (var j = 0; j < elms.length; j++)
-          elms[j].style.display = "none";
-      }
-    }
-
     l1[show1].style.cssText = `display: flex;
                              width: 72vw; 
                              height: 58vh; 
@@ -212,12 +146,21 @@ const Search = () => {
                              minHeight: none;
                              flex-wrap: nowrap;
                              flex-direction: column;`;
-
-    var elms = document.querySelectorAll(
-      `[id='${ids2[show2]}']`
-    ) as NodeListOf<HTMLElement>;
-    for (var j = 0; j < elms.length; j++)
-      elms[j].style.display = "flex";
+    let ids2 = [
+      "artists",
+      "albums",
+      "playlists",
+      "tracks"
+    ];
+    for (let k = 0; k < 4; k++) {
+      if (id2 !== ids2[k]) {
+        var elms = document.querySelectorAll(
+          `[id='${ids2[k]}']`
+        ) as NodeListOf<HTMLElement>;
+        for (var j = 0; j < elms.length; j++)
+          elms[j].style.display = "none";
+      }
+    }
 
     var elms = document.querySelectorAll(
       "[id='title']"
@@ -275,7 +218,7 @@ const Search = () => {
                         );
                       return (
                         <>
-                          <div key={i} className={styles.artists} id='artists'>
+                          <div key={i} className={styles.artists} id='artists' style={{ display: "flex" }}>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -283,7 +226,23 @@ const Search = () => {
                               id="img"
                             />
                             <div className={styles.content} id='content'>
-                              <p>{a.name}</p>
+                              <Link href={a.external_urls.spotify}>
+                                <a>
+                                  <p className={styles.name}>{a.name}</p>
+                                </a>
+                              </Link>
+                              <div className={styles.followers}>
+                                <p>Followers:</p>
+                                <p>{a.followers.total}</p>
+                              </div>
+                              <div className={styles.genres}>
+                                <ul>
+                                  <p>Genres:</p>
+                                  {a.genres.map((g, i) => (
+                                    <li key={i}>{g}</li>
+                                  ))}
+                                </ul>
+                              </div>
                             </div>
                           </div>
                         </>
@@ -317,7 +276,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={i} className={styles.albums} id='albums'>
+                        <div key={i} className={styles.albums} id='albums' style={{ display: "flex" }}>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -325,7 +284,27 @@ const Search = () => {
                             id="img"
                           />
                           <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.albumArtists}>
+                              <ul>
+                                <p>Artists:</p>
+                                {a.artists.map((b, i) => (
+                                  <li key={i}>{b.name}</li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className={styles.albumTracks}>
+                              <p>Total Tracks:</p>
+                              <p>{a.total_tracks}</p>
+                            </div>
+                            <div className={styles.releaseDate}>
+                              <p>Release Date:</p>
+                              <p>{a.release_date}</p>
+                            </div>
                           </div>
                         </div>
                       );
@@ -358,7 +337,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={i} className={styles.playlists} id='playlists'>
+                        <div key={i} className={styles.playlists} id='playlists' style={{ display: "flex" }}>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -366,7 +345,18 @@ const Search = () => {
                             id="img"
                           />
                           <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.description}>
+                              <p>{a.description}</p>
+                            </div>
+                            <div className={styles.owner}>
+                              <p>Playlist Owner:</p>
+                              <p>{a.owner.display_name}</p>
+                            </div>
                           </div>
                         </div>
                       )
@@ -399,7 +389,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={i} className={styles.tracks} id='tracks'>
+                        <div key={i} className={styles.tracks} id='tracks' style={{ display: "flex" }}>
                           <img
                             className={styles.img}
                             src={a.album.images[0].url}
@@ -407,7 +397,30 @@ const Search = () => {
                             id="img"
                           />
                           <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.trackArtist}>
+                              <ul>
+                                <p>Artists:</p>
+                                {a.artists.map((b, i) => (
+                                  <li key={i}>{b.name}</li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className={styles.trackAlbum}>
+                              <p>Album:</p>
+                              <p>{a.album.name}</p>
+                            </div>
+                            <div className={styles.preview}>
+                              <p>Preview:</p>
+                              <audio controls>
+                                <source src={a.preview_url} />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
                           </div>
                         </div>
                       );
