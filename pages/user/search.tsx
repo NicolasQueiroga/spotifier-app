@@ -125,6 +125,16 @@ const Search = () => {
         "[id='title']"
       ) as NodeListOf<HTMLElement>;
       for (var i = 0; i < elms.length; i++) elms[i].style.display = 'unset';
+
+      let content = ['artists', 'albums', 'playlists', 'tracks'];
+      for (let n in content) {
+        var elms = document.querySelectorAll(
+          `[id='${content[n]}']`
+        ) as NodeListOf<HTMLElement>;
+        for (var j = 0; j < elms.length; j++)
+          elms[j].style.cssText = `display: flex;`;
+      }
+
       setExpanded(false);
     }
   }
@@ -178,16 +188,17 @@ const Search = () => {
       "playlists",
       "tracks"
     ];
-    var e1 = document.getElementById(ids2[0]) as HTMLElement;
-    var e2 = document.getElementById(ids2[1]) as HTMLElement;
-    var e3 = document.getElementById(ids2[2]) as HTMLElement;
-    var e4 = document.getElementById(ids2[3]) as HTMLElement;
-    var e5 = document.getElementById(ids2[4]) as HTMLElement;
-    const l2 = [e1, e2, e3, e4, e5];
+
     let show2 = 0;
     for (let i = 0; i < 4; i++) {
       if (id2 === ids2[i]) show2 = i;
-      else l2[i].style.display = "none";
+      else {
+        var elms = document.querySelectorAll(
+          `[id='${ids2[i]}']`
+        ) as NodeListOf<HTMLElement>;
+        for (var j = 0; j < elms.length; j++)
+          elms[j].style.display = "none";
+      }
     }
 
     l1[show1].style.cssText = `display: flex;
@@ -200,7 +211,11 @@ const Search = () => {
                              flex-wrap: nowrap;
                              flex-direction: column;`;
 
-    l2[show2].style.cssText = `display: flex;`;
+    var elms = document.querySelectorAll(
+      `[id='${ids2[show2]}']`
+    ) as NodeListOf<HTMLElement>;
+    for (var j = 0; j < elms.length; j++)
+      elms[j].style.cssText = `display: flex;`;
 
     var elms = document.querySelectorAll(
       "[id='title']"
@@ -290,7 +305,7 @@ const Search = () => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.albums} id='albums'>
+                          <div key={a.id} className={styles.albums}>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -300,7 +315,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.albums}>
+                        <div key={a.id} className={styles.albums} id='albums'>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -331,7 +346,7 @@ const Search = () => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.playlists} id='playlists'>
+                          <div key={a.id} className={styles.playlists}>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -341,7 +356,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.playlists}>
+                        <div key={a.id} className={styles.playlists} id='playlists'>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -372,7 +387,7 @@ const Search = () => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.tracks} id='tracks'>
+                          <div key={a.id} className={styles.tracks}>
                             <img
                               className={styles.img}
                               src={a.album.images[0].url}
@@ -382,7 +397,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.tracks}>
+                        <div key={a.id} className={styles.tracks} id='tracks'>
                           <img
                             className={styles.img}
                             src={a.album.images[0].url}
