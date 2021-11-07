@@ -99,6 +99,10 @@
   display: inline;
 }
 
+.artistExpanded {
+  display: none;
+}
+
 .name {
   color: black;
   font-weight: bold;
@@ -106,19 +110,16 @@
   margin: 0vh 2vw;
 }
 
+.img {
+  height: 60px;
+  width: 60px;
+}
+
 .name:hover {
   transform: scale(0.9);
   transition: all 50ms;
 }
 
-.artistExpanded {
-  display: none;
-}
-
-.img {
-  height: 60px;
-  width: 60px;
-}
 
 .noSession {
   width: 100vw;
