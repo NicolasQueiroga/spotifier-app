@@ -66,13 +66,15 @@ const Search = () => {
   useEffect(() => {
     async function loadSearch(searchText: string) {
       try {
-        const spotify = await getSpotifyClient();
-        const response = await spotify.get(
-          `/search?q=${searchText}&type=album,artist,playlist,track`
-        );
+        if (searchText.length > 0) {
+          const spotify = await getSpotifyClient();
+          const response = await spotify.get(
+            `/search?q=${searchText}&type=album,artist,playlist,track`
+          );
 
-        console.log(response.data);
-        setSearch(response.data);
+          console.log(response.data);
+          setSearch(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -215,7 +217,7 @@ const Search = () => {
       `[id='${ids2[show2]}']`
     ) as NodeListOf<HTMLElement>;
     for (var j = 0; j < elms.length; j++)
-      elms[j].style.cssText = `display: flex;`;
+      elms[j].style.display = "flex";
 
     var elms = document.querySelectorAll(
       "[id='title']"
@@ -256,12 +258,12 @@ const Search = () => {
                   id="artistsContainer"
                   onClick={expandArtist}
                 >
-                  {searchVal?.artists?.items?.map((a) => {
+                  {searchVal?.artists?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
                           <>
-                            <div key={a.id} className={styles.artists}>
+                            <div key={i} className={styles.artists}>
                               <img
                                 className={styles.img}
                                 src={a.images[0].url}
@@ -273,7 +275,7 @@ const Search = () => {
                         );
                       return (
                         <>
-                          <div key={a.id} className={styles.artists} id='artists'>
+                          <div key={i} className={styles.artists} id='artists'>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -301,11 +303,11 @@ const Search = () => {
                   id="albumsContainer"
                   onClick={expandAlbum}
                 >
-                  {searchVal?.albums?.items?.map((a) => {
+                  {searchVal?.albums?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.albums}>
+                          <div key={i} className={styles.albums}>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -315,7 +317,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.albums} id='albums'>
+                        <div key={i} className={styles.albums} id='albums'>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -342,11 +344,11 @@ const Search = () => {
                   id="playlistsContainer"
                   onClick={expandPlaylist}
                 >
-                  {searchVal?.playlists?.items?.map((a) => {
+                  {searchVal?.playlists?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.playlists}>
+                          <div key={i} className={styles.playlists}>
                             <img
                               className={styles.img}
                               src={a.images[0].url}
@@ -356,7 +358,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.playlists} id='playlists'>
+                        <div key={i} className={styles.playlists} id='playlists'>
                           <img
                             className={styles.img}
                             src={a.images[0].url}
@@ -383,11 +385,11 @@ const Search = () => {
                   id="tracksContainer"
                   onClick={expandTrack}
                 >
-                  {searchVal?.tracks?.items?.map((a) => {
+                  {searchVal?.tracks?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.tracks}>
+                          <div key={i} className={styles.tracks}>
                             <img
                               className={styles.img}
                               src={a.album.images[0].url}
@@ -397,7 +399,7 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.tracks} id='tracks'>
+                        <div key={i} className={styles.tracks} id='tracks'>
                           <img
                             className={styles.img}
                             src={a.album.images[0].url}
