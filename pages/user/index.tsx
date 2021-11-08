@@ -4,10 +4,8 @@ import Layout from "../../components/layout";
 import Head from "next/head";
 import styles from "../../styles/pages/user/Profile.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
-import Router from "next/router";
 import { useState, useEffect } from "react";
 import { api } from "../../sevices/api";
-
 
 const Profile = () => {
   const [session, loading] = useSession();
