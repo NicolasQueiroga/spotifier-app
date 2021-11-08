@@ -169,6 +169,14 @@ const Search = () => {
       elms[i].style.display = "none";
   }
 
+  if (!session)
+    return (
+      <Layout>
+        <div className={styles.noSession}>
+          <h1>No Session!</h1>
+        </div>
+      </Layout>
+    );
   if (loading) return <div>loading...</div>;
   if (session && !loading)
     return (
@@ -433,14 +441,6 @@ const Search = () => {
             </div>
           </div>
         )}
-      </Layout>
-    );
-  if (!session)
-    return (
-      <Layout>
-        <div className={styles.noSession}>
-          <h1>No Session!</h1>
-        </div>
       </Layout>
     );
 };

@@ -64,6 +64,14 @@ const Profile = () => {
     loadTopTracks();
   }, []);
 
+  if (!session)
+    return (
+      <Layout>
+        <div className={styles.noSession}>
+          <h1>No Session!</h1>
+        </div>
+      </Layout>
+    );
   if (loading) return <div>loading...</div>;
   if (!loading && session)
     return (
@@ -112,14 +120,6 @@ const Profile = () => {
             </div>
           </>
         )}
-      </Layout>
-    );
-  if (!session)
-    return (
-      <Layout>
-        <div className={styles.noSession}>
-          <h1>No Session!</h1>
-        </div>
       </Layout>
     );
 };
