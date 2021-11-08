@@ -82,6 +82,15 @@ interface FollowersProps {
     total: number;
 }
 
+interface OwnerProps {
+    display_name: string;
+    external_urls: ExternalUrlProps;
+    href: string;
+    id: string;
+    type: string;
+    uri: string;
+}
+
 interface PlaylistProps {
     collaborative: boolean;
     description: string;
@@ -90,7 +99,7 @@ interface PlaylistProps {
     id: string;
     images: Array<ImageProps>;
     name: string;
-    owner: Object;
+    owner: OwnerProps;
     primary_color: any;
     public: boolean;
     snapshot_id: string;
