@@ -48,6 +48,11 @@ const Header = () => {
                     <a className={styles.search}>Search</a>
                   </Link>
                 )}
+                {endpoint[endpoint.length - 1] !== "favorites" && (
+                  <Link href="/user/favorites">
+                    <a className={styles.favorites}>Favorites</a>
+                  </Link>
+                )}
               </div>
               <Link href="/api/auth/signout">
                 <a
