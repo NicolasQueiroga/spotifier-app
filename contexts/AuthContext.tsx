@@ -56,7 +56,6 @@ export async function signIn({ email, password }: SignInData): Promise<void> {
     });
 
     const token: ReponseProps = response.auth_token;
-    console.log("authcontext token ", token);
     setCookie(undefined, "app.accessToken", token.token, {
       maxAge: 60 * 60 * 1,
     });

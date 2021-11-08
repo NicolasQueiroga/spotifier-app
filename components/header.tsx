@@ -7,7 +7,6 @@ const Header = () => {
   const [session, loading] = useSession();
   const { asPath, pathname } = useRouter();
   const endpoint = asPath.split("/");
-
   return (
     <header>
       <nav>

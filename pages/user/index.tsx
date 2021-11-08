@@ -62,6 +62,7 @@ const Profile = () => {
     loadTopTracks();
   }, []);
 
+  if (loading) return <div>loading...</div>;
   if (!session)
     return (
       <Layout>
@@ -70,7 +71,6 @@ const Profile = () => {
         </div>
       </Layout>
     );
-  if (loading) return <div>loading...</div>;
   if (!loading && session)
     return (
       <Layout>

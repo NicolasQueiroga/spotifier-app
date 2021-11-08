@@ -107,14 +107,39 @@
   display: inline;
 }
 
-.img {
-  height: 60px;
-  width: 60px;
+.name:hover {
+  transform: scale(0.999);
+  transition: all 5ms;
 }
 
-.name:hover {
-  transform: scale(0.9);
-  transition: all 50ms;
+.imgContainer {
+  display: inline-block;
+  position: relative;
+}
+
+.imgContainer img {
+  height: 100%;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.imgContainer:hover img {
+  filter: blur(2px) brightness(60%);
+}
+
+.imgContainer :not(img) {
+  position: absolute;
+  top: 30%;
+  z-index: 1;
+  color: white;
+  text-align: center;
+  width: 100%;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.imgContainer:hover :not(img) {
+  opacity: 1;
 }
 
 .noSession {
@@ -131,8 +156,9 @@
   display: flex;
   width: 100vw;
   flex-direction: row;
-  align-items: center;
   margin-left: 2vw;
+  margin-bottom: 5vh;
+  margin-top: 6vh;
 }
 
 .name {
@@ -142,10 +168,83 @@
   margin: 0vh 2vw;
 }
 
-/* -------- */
 /* -artist- */
 
-/* -------- */
+.followers {
+  margin-left: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.genres {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* -album- */
+
+.albumArtists {
+  margin-left: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.albumTracks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.releaseDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* -playlist- */
+
+.owner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 3vw;
+  margin-right: 1vw;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 18vw;
+}
+
+/* -track- */
+
+.trackArtist {
+  margin-left: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trackAlbum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 3vw;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+/* ------- */
 
 @keyframes fadein {
   from {
