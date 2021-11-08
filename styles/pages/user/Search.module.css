@@ -90,17 +90,13 @@
   width: 100vw;
   flex-direction: row;
   align-items: center;
-  margin-left: 7vw;
+  margin-left: 2vw;
 }
 
 .clickHere {
   width: 100vw;
   height: 4vh;
   display: inline;
-}
-
-.artistExpanded {
-  display: none;
 }
 
 .name {
