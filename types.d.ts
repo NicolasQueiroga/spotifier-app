@@ -138,3 +138,52 @@ interface SearchProps {
   playlists: PlaylistsProps;
   tracks: TracksProps;
 }
+
+// Django REST api props
+interface ApiUserProps {
+  username: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  id: number;
+  email: string;
+}
+
+interface ApiBaseProps {
+  id: string;
+  createdAt: string;
+  userId: number;
+}
+
+interface ApiArtistProps extends ApiBaseProps {
+  artist: string;
+}
+
+interface ApiAlbumProps extends ApiBaseProps {
+  album: string;
+}
+
+interface ApiPlaylistProps extends ApiBaseProps {
+  playlist: string
+}
+
+interface ApiTrackProps extends ApiBaseProps {
+  track: string;
+}
+
+interface SignInData {
+  email: string;
+  password: string;
+}
+
+interface SignUpData extends SignInData {
+  re_password: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  // country: string;
+  // region: string;
+  // state: string;
+  // gender: string;
+}

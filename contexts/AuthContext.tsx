@@ -1,35 +1,8 @@
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { api } from "../sevices/api";
 import router from "next/router";
+import { getCookieParser } from "next/dist/server/api-utils";
 
-export type User = {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  region: string;
-  state: string;
-  gender: string;
-  phoneNumber: string;
-};
-
-export interface SignInData {
-  email: string;
-  password: string;
-}
-
-export interface SignUpData extends SignInData {
-  re_password: string;
-  username: string;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  // country: string;
-  // region: string;
-  // state: string;
-  // gender: string;
-}
 
 // type AuthContextType = {
 //     setLoading: Dispatch<SetStateAction<boolean>>;
@@ -61,7 +34,7 @@ export async function signIn({ email, password }: SignInData): Promise<void> {
     });
 
     api.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
-    router.push("/user");
+    router.push("/user/bookmarks");
   } catch (error: any) {
     return error.response;
   }

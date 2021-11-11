@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { api } from "../../sevices/api";
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
@@ -6,42 +7,56 @@ import Link from "next/link";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
-import { api } from "../../sevices/api";
 
-const Search = () => {
+const Bookmarks = () => {
   const [session, loading] = useSession();
 
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const [searchVal, setSearch] = useState<SearchProps>();
-  const [searchText, setSearchText] = useState("");
-  useEffect(() => {
-    async function loadSearch(searchText: string) {
-      try {
-        if (searchText.length > 0) {
-          const spotify = await getSpotifyClient();
-          const response = await spotify.get(
-            `/search?q=${searchText}&type=album,artist,playlist,track`
-          );
 
-          console.log(response.data);
-          setSearch(response.data);
-        }
+  const [artist, setArtist] = useState<ApiArtistProps>();
+  const [album, setAlbum] = useState<ApiAlbumProps>();
+  const [playlist, setPlaylist] = useState<ApiPlaylistProps>();
+  const [track, setTrack] = useState<ApiTrackProps>();
+  const [userId, setUserId] = useState("");
+  useEffect(() => {
+    async function loadId(userId: string) {
+      try {
+        const { data: artistResponse } = await api.get(`/bookmark/artist/?user=${userId}`);
+        const { data: albumResponse } = await api.get(`/bookmark/album/?user=${userId}`);
+        const { data: playlistResponse } = await api.get(`/bookmark/playlist/?user=${userId}`);
+        const { data: trackResponse } = await api.get(`/bookmark/track/?user=${userId}`);
+
+        setArtist(artistResponse);
+        setAlbum(albumResponse);
+        setPlaylist(playlistResponse);
+        setTrack(trackResponse);
       } catch (error) {
         console.log(error);
       }
     }
     setExpanded(false);
-    loadSearch(searchText);
-  }, [searchText]);
+    loadId(userId);
+  }, [userId]);
 
-  function onSearchTextChange(e: any) {
-    setSearchText(e.target.value);
-  }
+  const [user, setUser] = useState<ApiUserProps>();
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const { data: user } = await api.get(`/auth/users/me`);
+
+        setUser(user);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setExpanded(false);
+    loadUser();
+  }, []);
 
   function showContent() {
-    if (searchText.length >= 0 && !ran) {
+    if (artist?.artist.length! >= 0 && !ran) {
       var e = document.getElementById("resultContainer") as HTMLElement;
       e.style.display = "flex";
       var s = document.getElementById("searchBar") as HTMLElement;
@@ -169,13 +184,9 @@ const Search = () => {
     for (var i = 0; i < elms.length; i++) elms[i].style.display = "none";
   }
 
-  async function addBookmark(type: string, id: string) {
+  async function deleteBookmark(type: string, id: string) {
     try {
-      const body = {
-        type: id,
-      }
-      const { data: response } = await api.post(`/bookmark/${type}/`, body)
-      console.log(response);
+      await api.delete(`/bookmark/${type}/${id}/`)
     } catch (error) {
       console.log(error)
     }
@@ -251,7 +262,7 @@ const Search = () => {
                                 src={a.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={async () => await addBookmark('artist', a.id)}
+                                onClick={() => bookmarkArtist(a.id)}
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>
@@ -321,7 +332,7 @@ const Search = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await addBookmark('album', a.id)}
+                              onClick={() => bookmarkAlbums(a.id)}
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -392,7 +403,7 @@ const Search = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await addBookmark('playlist', a.id)}
+                              onClick={() => bookmarkPlaylists(a.id)}
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -456,9 +467,7 @@ const Search = () => {
                                 src={a.album.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={async () => {
-                                  await addBookmark('track', a.id)
-                                }}
+                                onClick={() => bookmarkTracks(a.id)}
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>
@@ -501,4 +510,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default Bookmarks;
