@@ -7,7 +7,6 @@ const Header = () => {
   const [session, loading] = useSession();
   const { asPath, pathname } = useRouter();
   const endpoint = asPath.split("/");
-
   return (
     <header>
       <nav>
@@ -46,6 +45,11 @@ const Header = () => {
                 {endpoint[endpoint.length - 1] !== "search" && (
                   <Link href="/user/search">
                     <a className={styles.search}>Search</a>
+                  </Link>
+                )}
+                {endpoint[endpoint.length - 1] !== "favorites" && (
+                  <Link href="/user/favorites">
+                    <a className={styles.favorites}>Favorites</a>
                   </Link>
                 )}
               </div>

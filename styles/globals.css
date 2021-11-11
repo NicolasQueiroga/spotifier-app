@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600&display=swap");
-* {
+/* * {
   box-sizing: border-box;
-}
+} */
 
 html,
 body {
@@ -34,7 +34,8 @@ p {
   font-size: 14px;
   font-weight: 100;
   letter-spacing: 0.5px;
-  margin: 30px 0 30px;
+  text-align: center;
+  /* margin: 30px 0 30px; */
 }
 
 span {
@@ -96,9 +97,9 @@ select {
   width: 100%;
 }
 
-li {
+/* li {
   margin: 10px;
-}
+} */
 
 select {
   border-radius: 20px;
@@ -118,6 +119,13 @@ img {
   height: 150px;
   width: 150px;
   object-fit: cover;
+}
+
+audio {
+  margin: 15px 0px 4vh;
+  opacity: 0.9;
+  height: 30px;
+  width: 245px;
 }
 
 ::-webkit-scrollbar {

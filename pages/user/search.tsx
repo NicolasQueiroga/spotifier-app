@@ -2,58 +2,10 @@
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
+import Link from "next/link";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
-import { artistProps, trackProps, albumProps, imageProps } from ".";
-
-interface playlistProps {
-  collaborative: boolean;
-  description: string;
-  external_urls: Object;
-  href: string;
-  id: string;
-  images: Array<imageProps>;
-  name: string;
-  owner: Object;
-  primary_color: any;
-  public: boolean;
-  snapshot_id: string;
-  tracks: Object;
-  type: string;
-  uri: string;
-}
-interface baseProps {
-  href: string;
-  limit: number;
-  next: string;
-  ofset: number;
-  previous: string;
-  total: number;
-}
-
-interface albumsProps extends baseProps {
-  items: Array<albumProps>;
-}
-
-interface artistsProps extends baseProps {
-  items: Array<artistProps>;
-}
-
-interface playlistsProps extends baseProps {
-  items: Array<playlistProps>;
-}
-
-interface tracksProps extends baseProps {
-  items: Array<trackProps>;
-}
-
-interface searchProps {
-  albums: albumsProps;
-  artists: artistsProps;
-  playlists: playlistsProps;
-  tracks: tracksProps;
-}
 
 const Search = () => {
   const [session, loading] = useSession();
@@ -61,18 +13,20 @@ const Search = () => {
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const [searchVal, setSearch] = useState<searchProps>();
+  const [searchVal, setSearch] = useState<SearchProps>();
   const [searchText, setSearchText] = useState("");
   useEffect(() => {
     async function loadSearch(searchText: string) {
       try {
-        const spotify = await getSpotifyClient();
-        const response = await spotify.get(
-          `/search?q=${searchText}&type=album,artist,playlist,track`
-        );
+        if (searchText.length > 0) {
+          const spotify = await getSpotifyClient();
+          const response = await spotify.get(
+            `/search?q=${searchText}&type=album,artist,playlist,track`
+          );
 
-        console.log(response.data);
-        setSearch(response.data);
+          console.log(response.data);
+          setSearch(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -124,29 +78,44 @@ const Search = () => {
       var elms = document.querySelectorAll(
         "[id='title']"
       ) as NodeListOf<HTMLElement>;
-      for (var i = 0; i < elms.length; i++) elms[i].style.display = 'unset';
+      for (var i = 0; i < elms.length; i++) elms[i].style.display = "unset";
+
+      let content = ["artists", "albums", "playlists", "tracks"];
+      for (let n in content) {
+        var elms = document.querySelectorAll(
+          `[id='${content[n]}']`
+        ) as NodeListOf<HTMLElement>;
+        for (var j = 0; j < elms.length; j++)
+          elms[j].style.cssText = `display: flex;`;
+      }
+
       setExpanded(false);
     }
   }
 
   function expandArtist() {
-    expand("artistsContainer", 'artists');
+    expand("artistsContainer", "artists");
   }
   function expandAlbum() {
-    expand("albumsContainer", 'albums');
+    expand("albumsContainer", "albums");
   }
   function expandPlaylist() {
-    expand("playlistsContainer", 'playlists');
+    expand("playlistsContainer", "playlists");
   }
   function expandTrack() {
-    expand("tracksContainer", 'tracks');
+    expand("tracksContainer", "tracks");
   }
 
   function expand(id1: string, id2: string) {
     setExpanded(true);
-    var containerElement = document.getElementById("resultContainer") as HTMLElement;
-    containerElement.style.cssText = `display: flex;
-                                      height: 60vh;`;
+    var containerElement = document.getElementById(
+      "resultContainer"
+    ) as HTMLElement;
+
+    containerElement.style.cssText = `
+    display: flex;
+    height: 60vh;
+    flex-direction: column;`;
 
     var elms = document.querySelectorAll(
       "[id='img']"
@@ -158,7 +127,7 @@ const Search = () => {
       "artistsContainer",
       "albumsContainer",
       "playlistsContainer",
-      "tracksContainer"
+      "tracksContainer",
     ];
     var e1 = document.getElementById(ids1[0]) as HTMLElement;
     var e2 = document.getElementById(ids1[1]) as HTMLElement;
@@ -172,44 +141,55 @@ const Search = () => {
       else l1[i].style.display = "none";
     }
 
-    let ids2 = [
-      "artists",
-      "albums",
-      "playlists",
-      "tracks"
-    ];
-    var e1 = document.getElementById(ids2[0]) as HTMLElement;
-    var e2 = document.getElementById(ids2[1]) as HTMLElement;
-    var e3 = document.getElementById(ids2[2]) as HTMLElement;
-    var e4 = document.getElementById(ids2[3]) as HTMLElement;
-    var e5 = document.getElementById(ids2[4]) as HTMLElement;
-    const l2 = [e1, e2, e3, e4, e5];
-    let show2 = 0;
-    for (let i = 0; i < 4; i++) {
-      if (id2 === ids2[i]) show2 = i;
-      else l2[i].style.display = "none";
+    l1[show1].style.cssText = `
+    display: flex;
+    width: 65vw; 
+    height: 58vh; 
+    transform: none; 
+    overflow-y: auto; 
+    maxHeight: none; 
+    minHeight: none;
+    flex-wrap: nowrap;
+    flex-direction: column;`;
+
+    let ids2 = ["artists", "albums", "playlists", "tracks"];
+    for (let k = 0; k < 4; k++) {
+      if (id2 !== ids2[k]) {
+        var elms = document.querySelectorAll(
+          `[id='${ids2[k]}']`
+        ) as NodeListOf<HTMLElement>;
+        for (var j = 0; j < elms.length; j++) elms[j].style.display = "none";
+      }
     }
-
-    l1[show1].style.cssText = `display: flex;
-                             width: 72vw; 
-                             height: 58vh; 
-                             transform: none; 
-                             overflow-y: auto; 
-                             maxHeight: none; 
-                             minHeight: none;
-                             flex-wrap: nowrap;
-                             flex-direction: column;`;
-
-    l2[show2].style.cssText = `display: flex;`;
 
     var elms = document.querySelectorAll(
       "[id='title']"
     ) as NodeListOf<HTMLElement>;
-    for (var i = 0; i < elms.length; i++)
-      elms[i].style.display = "none";
+    for (var i = 0; i < elms.length; i++) elms[i].style.display = "none";
+  }
+
+  async function bookmarkArtist(id: string) {
+    const type = "artist";
+  }
+  async function bookmarkAlbums(id: string) {
+    const type = "album";
+  }
+  async function bookmarkPlaylists(id: string) {
+    const type = "playlist";
+  }
+  async function bookmarkTracks(id: string) {
+    const type = "track";
   }
 
   if (loading) return <div>loading...</div>;
+  if (!session)
+    return (
+      <Layout>
+        <div className={styles.noSession}>
+          <h1>No Session!</h1>
+        </div>
+      </Layout>
+    );
   if (session && !loading)
     return (
       <Layout>
@@ -241,14 +221,14 @@ const Search = () => {
                   id="artistsContainer"
                   onClick={expandArtist}
                 >
-                  {searchVal?.artists?.items?.map((a) => {
+                  {searchVal?.artists?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
                           <>
-                            <div key={a.id} className={styles.artists}>
+                            <div key={i} className={styles.artists}>
                               <img
-                                className={styles.img}
+                                style={{ height: "60px", width: "60px" }}
                                 src={a.images[0].url}
                                 alt="Picture of the artist"
                                 id="img"
@@ -258,19 +238,47 @@ const Search = () => {
                         );
                       return (
                         <>
-                          <div key={a.id} className={styles.artists} id='artists'>
-                            <img
-                              className={styles.img}
-                              src={a.images[0].url}
-                              alt="Picture of the artist"
-                              id="img"
-                            />
-                            <div className={styles.content} id='content'>
-                              <p>{a.name}</p>
+                          <div
+                            key={i}
+                            className={styles.artists}
+                            id="artists"
+                            style={{ display: "flex" }}
+                          >
+                            <div className={styles.imgContainer}>
+                              <img
+                                className={styles.img}
+                                style={{ height: "250px", width: "250px" }}
+                                src={a.images[0].url}
+                                alt="Picture of the album"
+                                id="img"
+                                onClick={() => bookmarkArtist(a.id)}
+                              />
+                              <p className={styles.imgText}>Bookmark</p>
+                            </div>
+                            <div className={styles.content} id="content">
+                              <Link href={a.external_urls.spotify}>
+                                <a>
+                                  <p className={styles.name}>{a.name}</p>
+                                </a>
+                              </Link>
+                              <div className={styles.followers}>
+                                <p className={styles.name}>Followers:</p>
+                                <p>{a.followers.total}</p>
+                              </div>
+                              <div className={styles.genres}>
+                                <p className={styles.name}>Genres:</p>
+                                <ul>
+                                  {a.genres.length >= 0 &&
+                                    a.genres
+                                      .slice(0, 5)
+                                      .map((g, i) => <li key={i}>{g}</li>)}
+                                  {a.genres.length === 0 && <p>No Data</p>}
+                                </ul>
+                              </div>
                             </div>
                           </div>
                         </>
-                      )
+                      );
                     } catch (error) {
                       console.log(error);
                     }
@@ -286,13 +294,13 @@ const Search = () => {
                   id="albumsContainer"
                   onClick={expandAlbum}
                 >
-                  {searchVal?.albums?.items?.map((a) => {
+                  {searchVal?.albums?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.albums} id='albums'>
+                          <div key={i} className={styles.albums}>
                             <img
-                              className={styles.img}
+                              style={{ height: "60px", width: "60px" }}
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
@@ -300,15 +308,45 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.albums}>
-                          <img
-                            className={styles.img}
-                            src={a.images[0].url}
-                            alt="Picture of the album"
-                            id="img"
-                          />
-                          <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                        <div
+                          key={i}
+                          className={styles.albums}
+                          id="albums"
+                          style={{ display: "flex" }}
+                        >
+                          <div className={styles.imgContainer}>
+                            <img
+                              className={styles.img}
+                              style={{ height: "250px", width: "250px" }}
+                              src={a.images[0].url}
+                              alt="Picture of the album"
+                              id="img"
+                              onClick={() => bookmarkAlbums(a.id)}
+                            />
+                            <p className={styles.imgText}>Bookmark</p>
+                          </div>
+                          <div className={styles.content} id="content">
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.albumArtists}>
+                              <p className={styles.name}>Artists</p>
+                              <ul>
+                                {a.artists.map((b, i) => (
+                                  <li key={i}>{b.name}</li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className={styles.albumTracks}>
+                              <p className={styles.name}>Total Tracks</p>
+                              <p>{a.total_tracks}</p>
+                            </div>
+                            <div className={styles.releaseDate}>
+                              <p className={styles.name}>Release Date:</p>
+                              <p>{a.release_date}</p>
+                            </div>
                           </div>
                         </div>
                       );
@@ -327,13 +365,13 @@ const Search = () => {
                   id="playlistsContainer"
                   onClick={expandPlaylist}
                 >
-                  {searchVal?.playlists?.items?.map((a) => {
+                  {searchVal?.playlists?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.playlists} id='playlists'>
+                          <div key={i} className={styles.playlists}>
                             <img
-                              className={styles.img}
+                              style={{ height: "60px", width: "60px" }}
                               src={a.images[0].url}
                               alt="Picture of the playlist"
                               id="img"
@@ -341,18 +379,40 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.playlists}>
-                          <img
-                            className={styles.img}
-                            src={a.images[0].url}
-                            alt="Picture of the playlist"
-                            id="img"
-                          />
-                          <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                        <div
+                          key={i}
+                          className={styles.playlists}
+                          id="playlists"
+                          style={{ display: "flex" }}
+                        >
+                          <div className={styles.imgContainer}>
+                            <img
+                              className={styles.img}
+                              style={{ height: "250px", width: "250px" }}
+                              src={a.images[0].url}
+                              alt="Picture of the album"
+                              id="img"
+                              onClick={() => bookmarkPlaylists(a.id)}
+                            />
+                            <p className={styles.imgText}>Bookmark</p>
+                          </div>
+                          <div className={styles.content} id="content">
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.owner}>
+                              <p className={styles.name}>Owner</p>
+                              <p>{a.owner.display_name}</p>
+                            </div>
+                            <div className={styles.description}>
+                              <p className={styles.name}>Description</p>
+                              <p>{a.description}</p>
+                            </div>
                           </div>
                         </div>
-                      )
+                      );
                     } catch (error) {
                       console.log(error);
                     }
@@ -368,13 +428,13 @@ const Search = () => {
                   id="tracksContainer"
                   onClick={expandTrack}
                 >
-                  {searchVal?.tracks?.items?.map((a) => {
+                  {searchVal?.tracks?.items?.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
-                          <div key={a.id} className={styles.tracks} id='tracks'>
+                          <div key={i} className={styles.tracks}>
                             <img
-                              className={styles.img}
+                              style={{ height: "60px", width: "60px" }}
                               src={a.album.images[0].url}
                               alt="Picture of the track album"
                               id="img"
@@ -382,15 +442,47 @@ const Search = () => {
                           </div>
                         );
                       return (
-                        <div key={a.id} className={styles.tracks}>
-                          <img
-                            className={styles.img}
-                            src={a.album.images[0].url}
-                            alt="Picture of the track album"
-                            id="img"
-                          />
-                          <div className={styles.content} id='content'>
-                            <p>{a.name}</p>
+                        <div
+                          key={i}
+                          className={styles.tracks}
+                          id="tracks"
+                          style={{ display: "flex" }}
+                        >
+                          <div className={styles.preview}>
+                            <div className={styles.imgContainer}>
+                              <img
+                                className={styles.img}
+                                style={{ height: "250px", width: "250px" }}
+                                src={a.album.images[0].url}
+                                alt="Picture of the album"
+                                id="img"
+                                onClick={() => bookmarkTracks(a.id)}
+                              />
+                              <p className={styles.imgText}>Bookmark</p>
+                            </div>
+                            <audio controls>
+                              <source src={a.preview_url} />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                          <div className={styles.content} id="content">
+                            <Link href={a.external_urls.spotify}>
+                              <a>
+                                <p className={styles.name}>{a.name}</p>
+                              </a>
+                            </Link>
+                            <div className={styles.trackArtist}>
+                              <p className={styles.name}>Artists:</p>
+                              <ul>
+                                {a.artists.map((b, i) => (
+                                  <li key={i}>{b.name}</li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div className={styles.trackAlbum}>
+                              <p className={styles.name}>Album:</p>
+                              <p>{a.album.name}</p>
+                            </div>
                           </div>
                         </div>
                       );
@@ -403,14 +495,6 @@ const Search = () => {
             </div>
           </div>
         )}
-      </Layout>
-    );
-  if (!session)
-    return (
-      <Layout>
-        <div className={styles.noSession}>
-          <h1>No Session!</h1>
-        </div>
       </Layout>
     );
 };
