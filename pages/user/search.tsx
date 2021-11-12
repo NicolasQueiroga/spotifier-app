@@ -8,6 +8,7 @@ import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
 import { api } from "../../sevices/api";
 import { parseCookies } from "nookies";
+import router from "next/router";
 
 const Search = () => {
   const [session, loading] = useSession();
@@ -178,11 +179,10 @@ const Search = () => {
       const { data: response } = await api.post(`/bookmark/${type}/`, body)
       console.log(response);
     } catch (error) {
-      console.log(error)
+      console.log('error ', error)
+      router.push('/user/bookmarks')
     }
   }
-  const cookies = parseCookies();
-  console.log({ cookies });
 
   if (loading) return <div>loading...</div>;
   if (!session)

@@ -7,57 +7,134 @@ import Link from "next/link";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { signIn, signUp } from "../../contexts/AuthContext";
 
 const Bookmarks = () => {
   const [session, loading] = useSession();
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState<Array<string> | null>(null);
+
+  const [openSuForm, setOpenSuForm] = useState(false);
+  const [openLiForm, setOpenLiForm] = useState(false);
 
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
 
 
-  const [artist, setArtist] = useState<ApiArtistProps>();
-  const [album, setAlbum] = useState<ApiAlbumProps>();
-  const [playlist, setPlaylist] = useState<ApiPlaylistProps>();
-  const [track, setTrack] = useState<ApiTrackProps>();
-  const [userId, setUserId] = useState("");
-  useEffect(() => {
-    async function loadId(userId: string) {
-      try {
-        const { data: artistResponse } = await api.get(`/bookmark/artist/?user=${userId}`);
-        const { data: albumResponse } = await api.get(`/bookmark/album/?user=${userId}`);
-        const { data: playlistResponse } = await api.get(`/bookmark/playlist/?user=${userId}`);
-        const { data: trackResponse } = await api.get(`/bookmark/track/?user=${userId}`);
-
-        setArtist(artistResponse);
-        setAlbum(albumResponse);
-        setPlaylist(playlistResponse);
-        setTrack(trackResponse);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    setExpanded(false);
-    loadId(userId);
-  }, [userId]);
-
   const [user, setUser] = useState<ApiUserProps>();
   useEffect(() => {
     async function loadUser() {
-      try {
-        const { data: user } = await api.get(`/auth/users/me`);
-
-        setUser(user);
-      } catch (error) {
-        console.log(error);
+      if (authenticated) {
+        try {
+          const { data: user } = await api.get(`/auth/users/me`);
+          console.log(user);
+          setUser(user);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     setExpanded(false);
     loadUser();
-  }, []);
+  }, [authenticated]);
+
+
+  const [artistIds, setArtistIds] = useState<Array<ApiArtistProps>>([]);
+  const [albumIds, setAlbumIds] = useState<Array<ApiAlbumProps>>([]);
+  const [playlistIds, setPlaylistIds] = useState<Array<ApiPlaylistProps>>([]);
+  const [trackIds, setTrackIds] = useState<Array<ApiTrackProps>>([]);
+  const [userId, setUserId] = useState('');
+  useEffect(() => {
+    async function loadId(userId: string) {
+      if (authenticated) {
+        try {
+          const { data: artistResponse } = await api.get(`/bookmark/artist/?user=${userId}`);
+          const { data: albumResponse } = await api.get(`/bookmark/album/?user=${userId}`);
+          const { data: playlistResponse } = await api.get(`/bookmark/playlist/?user=${userId}`);
+          const { data: trackResponse } = await api.get(`/bookmark/track/?user=${userId}`);
+
+          console.log(artistResponse);
+          setArtistIds(artistResponse);
+          setAlbumIds(albumResponse);
+          setPlaylistIds(playlistResponse);
+          setTrackIds(trackResponse);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    setExpanded(false);
+    loadId(userId);
+  }, [authenticated, userId]);
+
+
+  const [artistList, setArtistList] = useState<Array<ArtistProps>>([]);
+  const [albumList, setAlbumList] = useState<Array<AlbumProps>>([]);
+  const [playlistList, setPlaylistList] = useState<Array<PlaylistProps>>([]);
+  const [trackList, setTrackList] = useState<Array<TrackProps>>([]);
+  useEffect(() => {
+    async function loadBookmarks() {
+      try {
+        if (authenticated) {
+          const spotify = await getSpotifyClient();
+
+          for (let i = 0; i < artistIds?.length; i++) {
+            let id = artistIds[i].artist;
+            if (id) {
+              try {
+                const { data: artistResponse } = await spotify.get(`/artists/${id}`);
+                setArtistList([...artistList, artistResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+          for (let i = 0; i < albumIds?.length; i++) {
+            let id = albumIds[i].album;
+            if (id) {
+              try {
+                const { data: albumResponse } = await spotify.get(`/albums/${id}`);
+                setAlbumList([...albumList, albumResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+          for (let i = 0; i < playlistIds?.length; i++) {
+            let id = playlistIds[i].playlist;
+            if (id) {
+              try {
+                const { data: playlistResponse } = await spotify.get(`/playlists/${id}`);
+                setPlaylistList([...playlistList, playlistResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+          for (let i = 0; i < trackIds?.length; i++) {
+            let id = trackIds[i].track;
+            if (id) {
+              try {
+                const { data: trackResponse } = await spotify.get(`/tracks/${id}`);
+                setTrackList([...trackList, trackResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setExpanded(false);
+    loadBookmarks();
+  }, [albumIds, albumList, artistIds, artistList, authenticated, playlistIds, playlistList, trackIds, trackList]);
 
   function showContent() {
-    if (artist?.artist.length! >= 0 && !ran) {
+    if (!ran) {
       var e = document.getElementById("resultContainer") as HTMLElement;
       e.style.display = "flex";
       var s = document.getElementById("searchBar") as HTMLElement;
@@ -193,6 +270,56 @@ const Bookmarks = () => {
     }
   }
 
+  async function handleSignIn(data: any) {
+    console.log(data);
+    try {
+      const response: any = await signIn(data);
+      setAuthenticated(true);
+      console.log(response);
+    } catch (error: any) {
+      setError(error.response);
+    }
+  }
+
+  async function handleSignUp(data: any) {
+    const response: any = await signUp(data);
+    setAuthenticated(true);
+    console.log(response);
+    if (response)
+      setError(response.data);
+  }
+
+  function login() {
+    return (
+      <Layout>
+        <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
+          <input {...register("email")} type="email" name="email" placeholder="E-mail" required />
+          <input {...register("password")} type="password" name="password" placeholder="Password" required />
+          {error && <div className={styles.errorBox}>{Object.values(error).map((e, i) => <p key={`error_${i}`}>{e[0]}</p>)}</div>}
+          <button type="submit">LogIn</button>
+        </form>
+      </Layout>
+    )
+  }
+
+  function signup() {
+    return (
+      <Layout>
+        <form className={styles.form} onSubmit={handleSubmit(handleSignUp)}>
+          <input {...register("username")} type="text" name="username" placeholder="Username" required />
+          <input {...register("first_name")} type="text" name="first_name" placeholder="First Name" required />
+          <input {...register("last_name")} type="text" name="last_name" placeholder="Last Name" required />
+          <input {...register("email")} type="email" name="email" placeholder="E-mail" required />
+          <input {...register("phone")} type="text" name="phone" placeholder="Phone Number" />
+          <input {...register("password")} type="password" name="password" placeholder="Password" required />
+          <input {...register("re_password")} type="password" name="re_password" placeholder="Password" required />
+          {error && <div className={styles.errorBox}>{Object.values(error).map((e, i) => <p key={`error_${i}`}>{e[0]}</p>)}</div>}
+          <button type="submit">SignUp</button>
+        </form>
+      </Layout>
+    )
+  }
+
   if (loading) return <div>loading...</div>;
   if (!session)
     return (
@@ -205,19 +332,22 @@ const Bookmarks = () => {
   if (session && !loading && !authenticated)
     return (
       <div className={styles.notLogged}>
-        <h1>To have bookmarks, please signup or login to my app!</h1>
-        <div className={styles.btns}>
-          <div className={styles.signup}>
-            <Link href='/auth/signup'>
-              <button>Sign Up</button>
-            </Link>
-          </div>
-          <div className={styles.login}>
-            <Link href='/auth/login'>
-              <button>Log In</button>
-            </Link>
-          </div>
-        </div>
+        {!openLiForm && !openSuForm && (
+          <Layout>
+            <h2>To have bookmarks, please signup or login to my app!</h2>
+            <div className={styles.btns}>
+              <div className={styles.signup}>
+                <button onClick={() => setOpenSuForm(true)}>Sign Up</button>
+              </div>
+              <div className={styles.login}>
+                <button onClick={() => setOpenLiForm(true)}>Log In</button>
+              </div>
+            </div>
+          </Layout>
+        )}
+        {openSuForm && !openLiForm && signup()}
+        {!openSuForm && openLiForm && login()}
+
       </div>
     )
   if (session && !loading && authenticated)
@@ -241,7 +371,7 @@ const Bookmarks = () => {
                   id="artistsContainer"
                   onClick={expandArtist}
                 >
-                  {searchVal?.artists?.items?.map((a, i) => {
+                  {artistList.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
@@ -314,7 +444,7 @@ const Bookmarks = () => {
                   id="albumsContainer"
                   onClick={expandAlbum}
                 >
-                  {searchVal?.albums?.items?.map((a, i) => {
+                  {albumList.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
@@ -385,7 +515,7 @@ const Bookmarks = () => {
                   id="playlistsContainer"
                   onClick={expandPlaylist}
                 >
-                  {searchVal?.playlists?.items?.map((a, i) => {
+                  {playlistList.map((a, i) => {
                     try {
                       if (!expanded)
                         return (
@@ -448,7 +578,7 @@ const Bookmarks = () => {
                   id="tracksContainer"
                   onClick={expandTrack}
                 >
-                  {searchVal?.tracks?.items?.map((a, i) => {
+                  {trackList.map((a, i) => {
                     try {
                       if (!expanded)
                         return (

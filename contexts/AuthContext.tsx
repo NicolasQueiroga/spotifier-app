@@ -3,20 +3,6 @@ import { api } from "../sevices/api";
 import router from "next/router";
 import { getCookieParser } from "next/dist/server/api-utils";
 
-
-// type AuthContextType = {
-//     setLoading: Dispatch<SetStateAction<boolean>>;
-//     user: User;
-//     isAuthenticated: boolean;
-//     signIn: (data: SignInData) => Promise<void>;
-//     signUp: (data: SignUpData) => Promise<void>;
-//     logOut: () => Promise<void>;
-// };
-
-// interface AuthProviderProps {
-//     children: ReactChild;
-// }
-
 export interface ReponseProps {
   token: string;
 }
@@ -29,6 +15,7 @@ export async function signIn({ email, password }: SignInData): Promise<void> {
     });
 
     const token: ReponseProps = response.auth_token;
+    console.log(token.token);
     setCookie(undefined, "app.accessToken", token.token, {
       maxAge: 60 * 60 * 1,
     });

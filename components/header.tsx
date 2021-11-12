@@ -47,9 +47,9 @@ const Header = () => {
                     <a className={styles.search}>Search</a>
                   </Link>
                 )}
-                {endpoint[endpoint.length - 1] !== "favorites" && (
-                  <Link href="/user/favorites">
-                    <a className={styles.favorites}>Favorites</a>
+                {endpoint[endpoint.length - 1] !== "bookmarks" && (
+                  <Link href="/user/bookmarks">
+                    <a className={styles.favorites}>Bookmarks</a>
                   </Link>
                 )}
               </div>
