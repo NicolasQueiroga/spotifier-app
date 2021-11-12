@@ -13,6 +13,7 @@ const Bookmarks = () => {
 
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
 
   const [artist, setArtist] = useState<ApiArtistProps>();
@@ -201,7 +202,25 @@ const Bookmarks = () => {
         </div>
       </Layout>
     );
-  if (session && !loading)
+  if (session && !loading && !authenticated)
+    return (
+      <div className={styles.notLogged}>
+        <h1>To have bookmarks, please signup or login to my app!</h1>
+        <div className={styles.btns}>
+          <div className={styles.signup}>
+            <Link href='/auth/signup'>
+              <button>Sign Up</button>
+            </Link>
+          </div>
+          <div className={styles.login}>
+            <Link href='/auth/login'>
+              <button>Log In</button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  if (session && !loading && authenticated)
     return (
       <Layout>
         <Head>
@@ -211,16 +230,6 @@ const Bookmarks = () => {
         </Head>
         {session && (
           <div className={styles.container}>
-            <div className={styles.searchBarContainer} id="searchBar">
-              <input
-                className={styles.searchBar}
-                type="text"
-                value={searchText}
-                onChange={onSearchTextChange}
-                onInput={showContent}
-                onClick={mainContent}
-              />
-            </div>
             <div className={styles.clickHere} onClick={mainContent}></div>
             <div className={styles.resultContainer} id="resultContainer">
               <div className={styles.box}>
@@ -262,7 +271,7 @@ const Bookmarks = () => {
                                 src={a.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={() => bookmarkArtist(a.id)}
+                                onClick={async () => await deleteBookmark('artist', a.id)}
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>
@@ -332,7 +341,7 @@ const Bookmarks = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={() => bookmarkAlbums(a.id)}
+                              onClick={async () => await deleteBookmark('album', a.id)}
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -403,7 +412,7 @@ const Bookmarks = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={() => bookmarkPlaylists(a.id)}
+                              onClick={async () => await deleteBookmark('playlist', a.id)}
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -467,7 +476,7 @@ const Bookmarks = () => {
                                 src={a.album.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={() => bookmarkTracks(a.id)}
+                                onClick={async () => await deleteBookmark('track', a.id)}
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>

@@ -7,6 +7,7 @@ import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
 import { api } from "../../sevices/api";
+import { parseCookies } from "nookies";
 
 const Search = () => {
   const [session, loading] = useSession();
@@ -180,6 +181,8 @@ const Search = () => {
       console.log(error)
     }
   }
+  const cookies = parseCookies();
+  console.log({ cookies });
 
   if (loading) return <div>loading...</div>;
   if (!session)
