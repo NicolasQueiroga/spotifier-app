@@ -23,7 +23,7 @@
   margin-right: 2.5vw;
 }
 
-.search,
-.favorites {
+.search, .favorites {
+  margin-right: 2vw;
   color: black;
 }

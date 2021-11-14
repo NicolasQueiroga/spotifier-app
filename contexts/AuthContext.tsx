@@ -3,6 +3,10 @@ import { api } from "../sevices/api";
 import router from "next/router";
 import { getCookieParser } from "next/dist/server/api-utils";
 
+function refreshPage() {
+  window.location.reload();
+}
+
 export async function signin({ email, password }: SignInData): Promise<void> {
   try {
     const { data: response } = await api.post("/auth/token/login/", {
@@ -11,13 +15,12 @@ export async function signin({ email, password }: SignInData): Promise<void> {
     });
 
     const token = response.auth_token as string;
-    console.log("authcontext token ", token);
     setCookie(undefined, "app.accessToken", token, {
       maxAge: 60 * 60 * 1,
       path: "/",
     });
 
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    api.defaults.headers.common["Authorization"] = `Token ${token}`;
     router.push("/user/bookmarks");
   } catch (error: any) {
     return error.response;
@@ -35,12 +38,12 @@ export async function signUp(signUpData: SignUpData): Promise<void> {
   }
 }
 
-export async function logOut(): Promise<void> {
+export function logOut(): void {
   try {
     destroyCookie(undefined, "app.accessToken");
   } catch (error: any) {
     console.log(error.response);
     return error.response;
   }
-  router.push("/");
+  // router.push("/");
 }

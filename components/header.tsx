@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { logOut } from "../contexts/AuthContext";
+import { destroyCookie } from "nookies";
 
 const Header: NextPage = () => {
   const [session, loading] = useSession();

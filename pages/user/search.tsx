@@ -180,6 +180,7 @@ const Search = () => {
         [type]: id,
       };
       const { data: response } = await api.post(`/bookmark/${type}/`, body);
+      alert("Bookamrk Added!");
       console.log(response);
     } catch (error) {
       console.log(error);

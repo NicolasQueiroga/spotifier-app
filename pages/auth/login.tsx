@@ -11,7 +11,6 @@ const Login: NextPage = () => {
 
   async function handleSignIn(data: any) {
     const response: any = await signin(data);
-    console.log(response);
     if (response) setError(response.data);
   }
 

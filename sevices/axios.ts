@@ -12,10 +12,8 @@ export function getAPIClient(ctx?: any): AxiosInstance {
     return config;
   });
 
-  if (accessToken) {
-    console.log(accessToken);
+  if (accessToken)
     api.defaults.headers.common["Authorization"] = `Token ${accessToken}`;
-  }
 
   return api;
 }
