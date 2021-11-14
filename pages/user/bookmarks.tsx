@@ -11,7 +11,6 @@ import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
 import { parseCookies } from "nookies";
 
-
 const Bookmarks = () => {
   const [session, loading] = useSession();
   const { "app.accessToken": accessToken } = parseCookies();
@@ -19,7 +18,7 @@ const Bookmarks = () => {
   const [expanded, setExpanded] = useState(false);
 
   const [user, setUser] = useState<ApiUserProps>();
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
   useEffect(() => {
     async function loadUser() {
       if (accessToken) {
@@ -37,7 +36,6 @@ const Bookmarks = () => {
     loadUser();
   }, [accessToken]);
 
-
   const [artistIds, setArtistIds] = useState<Array<ApiArtistProps>>([]);
   const [albumIds, setAlbumIds] = useState<Array<ApiAlbumProps>>([]);
   const [playlistIds, setPlaylistIds] = useState<Array<ApiPlaylistProps>>([]);
@@ -46,11 +44,19 @@ const Bookmarks = () => {
     async function loadId() {
       if (accessToken) {
         try {
-          const { data: artistResponse } = await api.get(`/bookmark/artist/?user=${userId}`);
-          const { data: albumResponse } = await api.get(`/bookmark/album/?user=${userId}`);
-          const { data: playlistResponse } = await api.get(`/bookmark/playlist/?user=${userId}`);
-          const { data: trackResponse } = await api.get(`/bookmark/track/?user=${userId}`);
-          
+          const { data: artistResponse } = await api.get(
+            `/bookmark/artist/?user=${userId}`
+          );
+          const { data: albumResponse } = await api.get(
+            `/bookmark/album/?user=${userId}`
+          );
+          const { data: playlistResponse } = await api.get(
+            `/bookmark/playlist/?user=${userId}`
+          );
+          const { data: trackResponse } = await api.get(
+            `/bookmark/track/?user=${userId}`
+          );
+
           setArtistIds(artistResponse);
           setAlbumIds(albumResponse);
           setPlaylistIds(playlistResponse);
@@ -61,10 +67,9 @@ const Bookmarks = () => {
       }
     }
 
-    loadId()
+    loadId();
     setExpanded(false);
   }, [accessToken, userId]);
-
 
   const [currentArtist, setCurrentArtist] = useState<ArtistProps>();
   const [artistList, setArtistList] = useState<Array<ArtistProps>>([]);
@@ -78,9 +83,14 @@ const Bookmarks = () => {
             let id = artistIds[i].artist;
             if (id) {
               try {
-                const { data: artistResponse } = await spotify.get(`/artists/${id}`);
+                const { data: artistResponse } = await spotify.get(
+                  `/artists/${id}`
+                );
                 if (!artistList.includes(artistResponse))
-                  setArtistList((currentArtist) => [...currentArtist, artistResponse]);
+                  setArtistList((currentArtist) => [
+                    ...currentArtist,
+                    artistResponse,
+                  ]);
               } catch (error) {
                 console.log(error);
               }
@@ -93,7 +103,7 @@ const Bookmarks = () => {
     }
     loadBookmarks();
   }, [accessToken, artistIds]);
-  console.log(artistList)
+  console.log(artistList);
 
   const [currentAlbum, setCurrentAlbum] = useState<AlbumProps>();
   const [albumList, setAlbumList] = useState<Array<AlbumProps>>([]);
@@ -106,9 +116,14 @@ const Bookmarks = () => {
             let id = albumIds[i].album;
             if (id) {
               try {
-                const { data: albumResponse } = await spotify.get(`/albums/${id}`);
+                const { data: albumResponse } = await spotify.get(
+                  `/albums/${id}`
+                );
                 if (!albumList.includes(albumResponse))
-                  setAlbumList((currentAlbum) => [...currentAlbum, albumResponse]);
+                  setAlbumList((currentAlbum) => [
+                    ...currentAlbum,
+                    albumResponse,
+                  ]);
               } catch (error) {
                 console.log(error);
               }
@@ -122,7 +137,6 @@ const Bookmarks = () => {
     loadAlbums();
   }, [accessToken, albumIds]);
 
-
   const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistProps>();
   const [playlistList, setPlaylistList] = useState<Array<PlaylistProps>>([]);
   useEffect(() => {
@@ -134,9 +148,14 @@ const Bookmarks = () => {
             let id = playlistIds[i].playlist;
             if (id) {
               try {
-                const { data: playlistResponse } = await spotify.get(`/playlists/${id}`);
+                const { data: playlistResponse } = await spotify.get(
+                  `/playlists/${id}`
+                );
                 if (!playlistList.includes(playlistResponse))
-                  setPlaylistList((currentPlaylist) => [...currentPlaylist, playlistResponse]);
+                  setPlaylistList((currentPlaylist) => [
+                    ...currentPlaylist,
+                    playlistResponse,
+                  ]);
               } catch (error) {
                 console.log(error);
               }
@@ -150,7 +169,6 @@ const Bookmarks = () => {
     loadPlaylists();
   }, [accessToken, playlistIds]);
 
-
   const [currentTrack, setCurrentTrack] = useState<TrackProps>();
   const [trackList, setTrackList] = useState<Array<TrackProps>>([]);
   useEffect(() => {
@@ -163,9 +181,14 @@ const Bookmarks = () => {
             let id = trackIds[i].track;
             if (id) {
               try {
-                const { data: trackResponse } = await spotify.get(`/tracks/${id}`);
+                const { data: trackResponse } = await spotify.get(
+                  `/tracks/${id}`
+                );
                 if (!trackList.includes(trackResponse))
-                  setTrackList((currentTrack) => [...currentTrack, trackResponse]);
+                  setTrackList((currentTrack) => [
+                    ...currentTrack,
+                    trackResponse,
+                  ]);
               } catch (error) {
                 console.log(error);
               }
@@ -178,7 +201,6 @@ const Bookmarks = () => {
     }
     loadTacks();
   }, [accessToken, trackIds]);
-
 
   const [run, setRun] = useState(false);
   function showContent() {
@@ -307,33 +329,29 @@ const Bookmarks = () => {
   }
 
   async function deleteBookmark(type: string, id: string) {
-    let itemId = '';
+    let itemId = "";
     switch (type) {
-      case 'artist':
+      case "artist":
         for (let i = 0; i < artistIds.length; i++) {
-          if (artistIds[i].artist === id)
-            itemId = artistIds[i].id;
+          if (artistIds[i].artist === id) itemId = artistIds[i].id;
         }
         break;
 
-      case 'album':
+      case "album":
         for (let i = 0; i < albumIds.length; i++) {
-          if (albumIds[i].album === id)
-            itemId = albumIds[i].id;
+          if (albumIds[i].album === id) itemId = albumIds[i].id;
         }
         break;
 
-      case 'playlsit':
+      case "playlsit":
         for (let i = 0; i < playlistIds.length; i++) {
-          if (playlistIds[i].playlist === id)
-            itemId = playlistIds[i].id;
+          if (playlistIds[i].playlist === id) itemId = playlistIds[i].id;
         }
         break;
 
-      case 'track':
+      case "track":
         for (let i = 0; i < trackIds.length; i++) {
-          if (trackIds[i].track === id)
-            itemId = trackIds[i].id;
+          if (trackIds[i].track === id) itemId = trackIds[i].id;
         }
         break;
 
@@ -341,12 +359,11 @@ const Bookmarks = () => {
         break;
     }
     try {
-      await api.delete(`/bookmark/${type}/${itemId}/`)
+      await api.delete(`/bookmark/${type}/${itemId}/`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
-
 
   if (loading) return <div>loading...</div>;
   if (!session)
@@ -358,7 +375,7 @@ const Bookmarks = () => {
       </Layout>
     );
   if (session && !loading && !accessToken) {
-    router.push('/auth');
+    router.push("/auth");
     return null;
   }
   if (session && !loading && accessToken)
@@ -412,7 +429,9 @@ const Bookmarks = () => {
                                 src={a.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={async () => await deleteBookmark('artist', a.id)}
+                                onClick={async () =>
+                                  await deleteBookmark("artist", a.id)
+                                }
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>
@@ -482,7 +501,9 @@ const Bookmarks = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await deleteBookmark('album', a.id)}
+                              onClick={async () =>
+                                await deleteBookmark("album", a.id)
+                              }
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -553,7 +574,9 @@ const Bookmarks = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await deleteBookmark('playlist', a.id)}
+                              onClick={async () =>
+                                await deleteBookmark("playlist", a.id)
+                              }
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -617,7 +640,9 @@ const Bookmarks = () => {
                                 src={a.album.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={async () => await deleteBookmark('track', a.id)}
+                                onClick={async () =>
+                                  await deleteBookmark("track", a.id)
+                                }
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>

@@ -17,7 +17,7 @@ const Search = () => {
   const [expanded, setExpanded] = useState(false);
 
   const { "app.accessToken": accessToken } = parseCookies();
-  console.log('search ', accessToken);
+  console.log("search ", accessToken);
 
   const [searchVal, setSearch] = useState<SearchProps>();
   const [searchText, setSearchText] = useState("");
@@ -178,12 +178,12 @@ const Search = () => {
     try {
       const body = {
         [type]: id,
-      }
-      const { data: response } = await api.post(`/bookmark/${type}/`, body)
+      };
+      const { data: response } = await api.post(`/bookmark/${type}/`, body);
       console.log(response);
     } catch (error) {
-      console.log(error)
-      router.push('/auth/')
+      console.log(error);
+      router.push("/auth/");
     }
   }
 
@@ -257,7 +257,9 @@ const Search = () => {
                                 src={a.images[0].url}
                                 alt="Picture of the album"
                                 id="img"
-                                onClick={async () => await addBookmark('artist', a.id)}
+                                onClick={async () =>
+                                  await addBookmark("artist", a.id)
+                                }
                               />
                               <p className={styles.imgText}>Bookmark</p>
                             </div>
@@ -327,7 +329,9 @@ const Search = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await addBookmark('album', a.id)}
+                              onClick={async () =>
+                                await addBookmark("album", a.id)
+                              }
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -398,7 +402,9 @@ const Search = () => {
                               src={a.images[0].url}
                               alt="Picture of the album"
                               id="img"
-                              onClick={async () => await addBookmark('playlist', a.id)}
+                              onClick={async () =>
+                                await addBookmark("playlist", a.id)
+                              }
                             />
                             <p className={styles.imgText}>Bookmark</p>
                           </div>
@@ -463,7 +469,7 @@ const Search = () => {
                                 alt="Picture of the album"
                                 id="img"
                                 onClick={async () => {
-                                  await addBookmark('track', a.id)
+                                  await addBookmark("track", a.id);
                                 }}
                               />
                               <p className={styles.imgText}>Bookmark</p>

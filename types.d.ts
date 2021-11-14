@@ -164,7 +164,7 @@ interface ApiAlbumProps extends ApiBaseProps {
 }
 
 interface ApiPlaylistProps extends ApiBaseProps {
-  playlist: string
+  playlist: string;
 }
 
 interface ApiTrackProps extends ApiBaseProps {
