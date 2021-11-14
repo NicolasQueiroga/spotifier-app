@@ -13,7 +13,8 @@ export function getAPIClient(ctx?: any): AxiosInstance {
   });
 
   if (accessToken) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    console.log(accessToken)
+    api.defaults.headers.common["Authorization"] = `Token ${accessToken}`;
   }
 
   return api;

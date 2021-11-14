@@ -16,6 +16,9 @@ const Search = () => {
   const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
+  const { "app.accessToken": accessToken } = parseCookies();
+  console.log('search ', accessToken);
+
   const [searchVal, setSearch] = useState<SearchProps>();
   const [searchText, setSearchText] = useState("");
   useEffect(() => {
@@ -174,13 +177,13 @@ const Search = () => {
   async function addBookmark(type: string, id: string) {
     try {
       const body = {
-        type: id,
+        [type]: id,
       }
       const { data: response } = await api.post(`/bookmark/${type}/`, body)
       console.log(response);
     } catch (error) {
-      console.log('error ', error)
-      router.push('/user/bookmarks')
+      console.log(error)
+      router.push('/auth/')
     }
   }
 

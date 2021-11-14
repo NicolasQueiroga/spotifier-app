@@ -1,36 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { api } from "../../sevices/api";
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
 import Link from "next/link";
-import styles from "../../styles/pages/user/Search.module.css";
+import router from "next/router";
+import styles from "../../styles/pages/user/Bookmarks.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { signIn, signUp } from "../../contexts/AuthContext";
+import { parseCookies } from "nookies";
+
 
 const Bookmarks = () => {
   const [session, loading] = useSession();
-  const { register, handleSubmit } = useForm();
-  const [error, setError] = useState<Array<string> | null>(null);
+  const { "app.accessToken": accessToken } = parseCookies();
 
-  const [openSuForm, setOpenSuForm] = useState(false);
-  const [openLiForm, setOpenLiForm] = useState(false);
-
-  const [ran, setRun] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
-
 
   const [user, setUser] = useState<ApiUserProps>();
+  const [userId, setUserId] = useState('');
   useEffect(() => {
     async function loadUser() {
-      if (authenticated) {
+      if (accessToken) {
         try {
           const { data: user } = await api.get(`/auth/users/me`);
           console.log(user);
           setUser(user);
+          setUserId(user.id);
         } catch (error) {
           console.log(error);
         }
@@ -38,24 +35,22 @@ const Bookmarks = () => {
     }
     setExpanded(false);
     loadUser();
-  }, [authenticated]);
+  }, [accessToken]);
 
 
   const [artistIds, setArtistIds] = useState<Array<ApiArtistProps>>([]);
   const [albumIds, setAlbumIds] = useState<Array<ApiAlbumProps>>([]);
   const [playlistIds, setPlaylistIds] = useState<Array<ApiPlaylistProps>>([]);
   const [trackIds, setTrackIds] = useState<Array<ApiTrackProps>>([]);
-  const [userId, setUserId] = useState('');
   useEffect(() => {
-    async function loadId(userId: string) {
-      if (authenticated) {
+    async function loadId() {
+      if (accessToken) {
         try {
           const { data: artistResponse } = await api.get(`/bookmark/artist/?user=${userId}`);
           const { data: albumResponse } = await api.get(`/bookmark/album/?user=${userId}`);
           const { data: playlistResponse } = await api.get(`/bookmark/playlist/?user=${userId}`);
           const { data: trackResponse } = await api.get(`/bookmark/track/?user=${userId}`);
-
-          console.log(artistResponse);
+          
           setArtistIds(artistResponse);
           setAlbumIds(albumResponse);
           setPlaylistIds(playlistResponse);
@@ -65,19 +60,18 @@ const Bookmarks = () => {
         }
       }
     }
+
+    loadId()
     setExpanded(false);
-    loadId(userId);
-  }, [authenticated, userId]);
+  }, [accessToken, userId]);
 
 
+  const [currentArtist, setCurrentArtist] = useState<ArtistProps>();
   const [artistList, setArtistList] = useState<Array<ArtistProps>>([]);
-  const [albumList, setAlbumList] = useState<Array<AlbumProps>>([]);
-  const [playlistList, setPlaylistList] = useState<Array<PlaylistProps>>([]);
-  const [trackList, setTrackList] = useState<Array<TrackProps>>([]);
   useEffect(() => {
     async function loadBookmarks() {
       try {
-        if (authenticated) {
+        if (accessToken) {
           const spotify = await getSpotifyClient();
 
           for (let i = 0; i < artistIds?.length; i++) {
@@ -85,40 +79,8 @@ const Bookmarks = () => {
             if (id) {
               try {
                 const { data: artistResponse } = await spotify.get(`/artists/${id}`);
-                setArtistList([...artistList, artistResponse]);
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          }
-          for (let i = 0; i < albumIds?.length; i++) {
-            let id = albumIds[i].album;
-            if (id) {
-              try {
-                const { data: albumResponse } = await spotify.get(`/albums/${id}`);
-                setAlbumList([...albumList, albumResponse]);
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          }
-          for (let i = 0; i < playlistIds?.length; i++) {
-            let id = playlistIds[i].playlist;
-            if (id) {
-              try {
-                const { data: playlistResponse } = await spotify.get(`/playlists/${id}`);
-                setPlaylistList([...playlistList, playlistResponse]);
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          }
-          for (let i = 0; i < trackIds?.length; i++) {
-            let id = trackIds[i].track;
-            if (id) {
-              try {
-                const { data: trackResponse } = await spotify.get(`/tracks/${id}`);
-                setTrackList([...trackList, trackResponse]);
+                if (!artistList.includes(artistResponse))
+                  setArtistList((currentArtist) => [...currentArtist, artistResponse]);
               } catch (error) {
                 console.log(error);
               }
@@ -129,16 +91,100 @@ const Bookmarks = () => {
         console.log(error);
       }
     }
-    setExpanded(false);
     loadBookmarks();
-  }, [albumIds, albumList, artistIds, artistList, authenticated, playlistIds, playlistList, trackIds, trackList]);
+  }, [accessToken, artistIds]);
+  console.log(artistList)
 
+  const [currentAlbum, setCurrentAlbum] = useState<AlbumProps>();
+  const [albumList, setAlbumList] = useState<Array<AlbumProps>>([]);
+  useEffect(() => {
+    async function loadAlbums() {
+      try {
+        if (accessToken) {
+          const spotify = await getSpotifyClient();
+          for (let i = 0; i < albumIds?.length; i++) {
+            let id = albumIds[i].album;
+            if (id) {
+              try {
+                const { data: albumResponse } = await spotify.get(`/albums/${id}`);
+                if (!albumList.includes(albumResponse))
+                  setAlbumList((currentAlbum) => [...currentAlbum, albumResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadAlbums();
+  }, [accessToken, albumIds]);
+
+
+  const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistProps>();
+  const [playlistList, setPlaylistList] = useState<Array<PlaylistProps>>([]);
+  useEffect(() => {
+    async function loadPlaylists() {
+      try {
+        if (accessToken) {
+          const spotify = await getSpotifyClient();
+          for (let i = 0; i < playlistIds?.length; i++) {
+            let id = playlistIds[i].playlist;
+            if (id) {
+              try {
+                const { data: playlistResponse } = await spotify.get(`/playlists/${id}`);
+                if (!playlistList.includes(playlistResponse))
+                  setPlaylistList((currentPlaylist) => [...currentPlaylist, playlistResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadPlaylists();
+  }, [accessToken, playlistIds]);
+
+
+  const [currentTrack, setCurrentTrack] = useState<TrackProps>();
+  const [trackList, setTrackList] = useState<Array<TrackProps>>([]);
+  useEffect(() => {
+    async function loadTacks() {
+      try {
+        if (accessToken) {
+          const spotify = await getSpotifyClient();
+
+          for (let i = 0; i < trackIds?.length; i++) {
+            let id = trackIds[i].track;
+            if (id) {
+              try {
+                const { data: trackResponse } = await spotify.get(`/tracks/${id}`);
+                if (!trackList.includes(trackResponse))
+                  setTrackList((currentTrack) => [...currentTrack, trackResponse]);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    loadTacks();
+  }, [accessToken, trackIds]);
+
+
+  const [run, setRun] = useState(false);
   function showContent() {
-    if (!ran) {
+    if (run) {
       var e = document.getElementById("resultContainer") as HTMLElement;
       e.style.display = "flex";
-      var s = document.getElementById("searchBar") as HTMLElement;
-      s.style.marginTop = "4vh";
 
       var elms = document.querySelectorAll(
         "[id='title']"
@@ -166,8 +212,6 @@ const Bookmarks = () => {
 
       var e = document.getElementById("resultContainer") as HTMLElement;
       e.style.display = "flex";
-      var s = document.getElementById("searchBar") as HTMLElement;
-      s.style.marginTop = "4vh";
 
       var elms = document.querySelectorAll(
         "[id='title']"
@@ -263,62 +307,46 @@ const Bookmarks = () => {
   }
 
   async function deleteBookmark(type: string, id: string) {
+    let itemId = '';
+    switch (type) {
+      case 'artist':
+        for (let i = 0; i < artistIds.length; i++) {
+          if (artistIds[i].artist === id)
+            itemId = artistIds[i].id;
+        }
+        break;
+
+      case 'album':
+        for (let i = 0; i < albumIds.length; i++) {
+          if (albumIds[i].album === id)
+            itemId = albumIds[i].id;
+        }
+        break;
+
+      case 'playlsit':
+        for (let i = 0; i < playlistIds.length; i++) {
+          if (playlistIds[i].playlist === id)
+            itemId = playlistIds[i].id;
+        }
+        break;
+
+      case 'track':
+        for (let i = 0; i < trackIds.length; i++) {
+          if (trackIds[i].track === id)
+            itemId = trackIds[i].id;
+        }
+        break;
+
+      default:
+        break;
+    }
     try {
-      await api.delete(`/bookmark/${type}/${id}/`)
+      await api.delete(`/bookmark/${type}/${itemId}/`)
     } catch (error) {
       console.log(error)
     }
   }
 
-  async function handleSignIn(data: any) {
-    console.log(data);
-    try {
-      const response: any = await signIn(data);
-      setAuthenticated(true);
-      console.log(response);
-    } catch (error: any) {
-      setError(error.response);
-    }
-  }
-
-  async function handleSignUp(data: any) {
-    const response: any = await signUp(data);
-    setAuthenticated(true);
-    console.log(response);
-    if (response)
-      setError(response.data);
-  }
-
-  function login() {
-    return (
-      <Layout>
-        <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
-          <input {...register("email")} type="email" name="email" placeholder="E-mail" required />
-          <input {...register("password")} type="password" name="password" placeholder="Password" required />
-          {error && <div className={styles.errorBox}>{Object.values(error).map((e, i) => <p key={`error_${i}`}>{e[0]}</p>)}</div>}
-          <button type="submit">LogIn</button>
-        </form>
-      </Layout>
-    )
-  }
-
-  function signup() {
-    return (
-      <Layout>
-        <form className={styles.form} onSubmit={handleSubmit(handleSignUp)}>
-          <input {...register("username")} type="text" name="username" placeholder="Username" required />
-          <input {...register("first_name")} type="text" name="first_name" placeholder="First Name" required />
-          <input {...register("last_name")} type="text" name="last_name" placeholder="Last Name" required />
-          <input {...register("email")} type="email" name="email" placeholder="E-mail" required />
-          <input {...register("phone")} type="text" name="phone" placeholder="Phone Number" />
-          <input {...register("password")} type="password" name="password" placeholder="Password" required />
-          <input {...register("re_password")} type="password" name="re_password" placeholder="Password" required />
-          {error && <div className={styles.errorBox}>{Object.values(error).map((e, i) => <p key={`error_${i}`}>{e[0]}</p>)}</div>}
-          <button type="submit">SignUp</button>
-        </form>
-      </Layout>
-    )
-  }
 
   if (loading) return <div>loading...</div>;
   if (!session)
@@ -329,28 +357,11 @@ const Bookmarks = () => {
         </div>
       </Layout>
     );
-  if (session && !loading && !authenticated)
-    return (
-      <div className={styles.notLogged}>
-        {!openLiForm && !openSuForm && (
-          <Layout>
-            <h2>To have bookmarks, please signup or login to my app!</h2>
-            <div className={styles.btns}>
-              <div className={styles.signup}>
-                <button onClick={() => setOpenSuForm(true)}>Sign Up</button>
-              </div>
-              <div className={styles.login}>
-                <button onClick={() => setOpenLiForm(true)}>Log In</button>
-              </div>
-            </div>
-          </Layout>
-        )}
-        {openSuForm && !openLiForm && signup()}
-        {!openSuForm && openLiForm && login()}
-
-      </div>
-    )
-  if (session && !loading && authenticated)
+  if (session && !loading && !accessToken) {
+    router.push('/auth');
+    return null;
+  }
+  if (session && !loading && accessToken)
     return (
       <Layout>
         <Head>

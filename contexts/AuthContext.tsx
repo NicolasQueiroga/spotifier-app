@@ -3,25 +3,24 @@ import { api } from "../sevices/api";
 import router from "next/router";
 import { getCookieParser } from "next/dist/server/api-utils";
 
-export interface ReponseProps {
-  token: string;
-}
 
-export async function signIn({ email, password }: SignInData): Promise<void> {
+export async function signin({ email, password }: SignInData): Promise<void> {
   try {
-    const { data: response }: any = await api.post("/auth/token/login/", {
+    const { data: response } = await api.post("/auth/token/login/", {
       email,
       password,
     });
 
-    const token: ReponseProps = response.auth_token;
-    console.log(token.token);
-    setCookie(undefined, "app.accessToken", token.token, {
+    const token = response.auth_token as string;
+    console.log('authcontext token ', token);
+    setCookie(undefined, "app.accessToken", token, {
       maxAge: 60 * 60 * 1,
+      path: '/'
     });
 
-    api.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
-    router.push("/user/bookmarks");
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    router.push("/user/bookmarks")
+
   } catch (error: any) {
     return error.response;
   }
@@ -32,7 +31,8 @@ export async function signUp(signUpData: SignUpData): Promise<void> {
     const { data: response }: any = await api.post("/auth/users/", {
       ...signUpData,
     });
-    await signIn(signUpData);
+    await signin(signUpData);
+
   } catch (error: any) {
     return error.response;
   }

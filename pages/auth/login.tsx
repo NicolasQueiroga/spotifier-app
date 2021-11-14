@@ -2,16 +2,16 @@ import { NextPage } from "next";
 import Head from 'next/head'
 import styles from '../../styles/pages/auth/Login.module.css'
 import { useState } from "react";
-import { signIn } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
+import { signin } from "../../contexts/AuthContext";
 
 const Login: NextPage = () => {
     const { register, handleSubmit } = useForm();
     const [error, setError] = useState<Array<string> | null>(null);
 
     async function handleSignIn(data: any) {
-        const response: any = await signIn(data);
-
+        const response: any = await signin(data);
+        console.log(response);
         if (response)
             setError(response.data);
     }

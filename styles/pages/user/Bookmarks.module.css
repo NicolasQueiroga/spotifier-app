@@ -6,17 +6,11 @@
   overflow: hidden;
 }
 
-.searchBarContainer {
-  transition: all 700ms;
-  width: 22vw;
-  margin-top: 38vh;
-  min-width: 160px;
-}
 
 .resultContainer {
   height: 65vh;
   width: 100vw;
-  display: none;
+  display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   -webkit-animation: fadein 1s;
@@ -86,7 +80,7 @@
   font-weight: bold;
   font-size: 1.5rem;
   margin-left: 1vw;
-  display: none;
+  display: unset;
 }
 
 .artists,

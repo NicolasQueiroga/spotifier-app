@@ -2,8 +2,10 @@ import Link from "next/link";
 import styles from "../styles/components/Header.module.css";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
+import { NextPage } from "next";
+import { logOut } from "../contexts/AuthContext";
 
-const Header = () => {
+const Header: NextPage = () => {
   const [session, loading] = useSession();
   const { asPath, pathname } = useRouter();
   const endpoint = asPath.split("/");
@@ -56,6 +58,7 @@ const Header = () => {
               <Link href="/api/auth/signout">
                 <a
                   onClick={(e) => {
+                    logOut();
                     e.preventDefault();
                     signOut({
                       callbackUrl: `${window.location.origin}`,
