@@ -3,6 +3,7 @@ import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
 import Link from "next/link";
+import Footer from "../../components/footer";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
@@ -188,7 +189,7 @@ const Search = () => {
     }
   }
 
-  if (loading) return <div>loading...</div>;
+  if (loading) return <p className={styles.loading}>loading...</p>;
   if (!session)
     return (
       <Layout>
@@ -262,7 +263,7 @@ const Search = () => {
                                   await addBookmark("artist", a.id)
                                 }
                               />
-                              <p className={styles.imgText}>Bookmark</p>
+                              <p className={styles.imgText}>Add Bookmark</p>
                             </div>
                             <div className={styles.content} id="content">
                               <Link href={a.external_urls.spotify}>
@@ -334,7 +335,7 @@ const Search = () => {
                                 await addBookmark("album", a.id)
                               }
                             />
-                            <p className={styles.imgText}>Bookmark</p>
+                            <p className={styles.imgText}>Add Bookmark</p>
                           </div>
                           <div className={styles.content} id="content">
                             <Link href={a.external_urls.spotify}>
@@ -407,7 +408,7 @@ const Search = () => {
                                 await addBookmark("playlist", a.id)
                               }
                             />
-                            <p className={styles.imgText}>Bookmark</p>
+                            <p className={styles.imgText}>Add Bookmark</p>
                           </div>
                           <div className={styles.content} id="content">
                             <Link href={a.external_urls.spotify}>
@@ -473,7 +474,7 @@ const Search = () => {
                                   await addBookmark("track", a.id);
                                 }}
                               />
-                              <p className={styles.imgText}>Bookmark</p>
+                              <p className={styles.imgText}>Add Bookmark</p>
                             </div>
                             <audio controls>
                               <source src={a.preview_url} />
@@ -508,6 +509,7 @@ const Search = () => {
                 </div>
               </div>
             </div>
+            <Footer />
           </div>
         )}
       </Layout>

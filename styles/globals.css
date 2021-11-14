@@ -4,8 +4,7 @@
   box-sizing: border-box;
 } */
 
-html,
-body {
+html, body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
@@ -62,17 +61,15 @@ button {
   transition: transform 80ms ease-in;
 }
 
-button:active,
-img:active {
+img:active, button:active, img:active {
   transform: scale(0.944);
 }
 
-button:hover,
-img:hover {
+button:hover, img:hover {
   transform: scale(0.98);
 }
 
-button:focus {
+img:focus, button:focus {
   outline: none;
 }
 
@@ -87,8 +84,7 @@ form {
   text-align: center;
 }
 
-input,
-select {
+input, select {
   border-radius: 20px;
   background-color: #eee;
   border: none;

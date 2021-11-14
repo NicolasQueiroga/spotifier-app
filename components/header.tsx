@@ -23,18 +23,6 @@ const Header: NextPage = () => {
                   </a>
                 </Link>
               </div>
-              <Link href="/api/auth/signin">
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    signIn("Spotify", {
-                      callbackUrl: `${window.location.origin}/user`,
-                    });
-                  }}
-                >
-                  <button className={styles.navbarBtn}>Sign in</button>
-                </a>
-              </Link>
             </div>
           )}
           {session && (

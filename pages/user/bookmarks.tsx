@@ -3,6 +3,7 @@
 import { api } from "../../sevices/api";
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
+import Footer from "../../components/footer";
 import Head from "next/head";
 import Link from "next/link";
 import router from "next/router";
@@ -353,7 +354,7 @@ const Bookmarks = () => {
     }
   }
 
-  if (loading) return <div>loading...</div>;
+  if (loading) return <p className={styles.loading}>loading...</p>;
   if (!session)
     return (
       <Layout>
@@ -667,6 +668,7 @@ const Bookmarks = () => {
                 </div>
               </div>
             </div>
+            <Footer />
           </div>
         )}
       </Layout>

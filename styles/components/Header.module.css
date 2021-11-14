@@ -1,5 +1,6 @@
 .header {
   width: 100vw;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,7 +16,7 @@
 }
 
 .navbarBtn {
-  margin-right: 10px;
+  margin-right: 50px;
 }
 
 .logo {

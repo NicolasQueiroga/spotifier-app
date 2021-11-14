@@ -2,6 +2,8 @@
 import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
+import Footer from "../../components/footer";
+import Link from "next/link";
 import styles from "../../styles/pages/user/Profile.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import { useState, useEffect } from "react";
@@ -26,13 +28,14 @@ const Profile = () => {
     loadUser();
   }, []);
 
+  const [range, setRange] = useState('short_term');
   const [topArtists, setTopArtists] = useState<Array<ArtistProps>>();
   useEffect(() => {
-    async function loadTopArtists() {
+    async function loadTopArtists(range: string) {
       try {
         const spotify = await getSpotifyClient();
         const response = await spotify.get(
-          "me/top/artists?time_range=short_term&limit=10"
+          `me/top/artists?time_range=${range}&limit=10`
         );
 
         console.log(response.data.items);
@@ -41,16 +44,16 @@ const Profile = () => {
         console.log(error);
       }
     }
-    loadTopArtists();
-  }, []);
+    loadTopArtists(range);
+  }, [range]);
 
   const [topTracks, setTopTracks] = useState<Array<TrackProps>>();
   useEffect(() => {
-    async function loadTopTracks() {
+    async function loadTopTracks(range: string) {
       try {
         const spotify = await getSpotifyClient();
         const response = await spotify.get(
-          "me/top/tracks?time_range=short_term&limit=10"
+          `me/top/tracks?time_range=${range}&limit=10`
         );
 
         console.log(response.data.items);
@@ -59,10 +62,10 @@ const Profile = () => {
         console.log(error);
       }
     }
-    loadTopTracks();
-  }, []);
+    loadTopTracks(range);
+  }, [range]);
 
-  if (loading) return <div>loading...</div>;
+  if (loading) return <p className={styles.loading}>loading...</p>;
   if (!session)
     return (
       <Layout>
@@ -86,35 +89,56 @@ const Profile = () => {
                 <p className={styles.welcomeText}>
                   Welcome, <strong>{user?.display_name}</strong>!
                 </p>
+                <div className={styles.selContainer}>
+                  <label htmlFor="time_range">Select Time Range</label>
+                  <select className={styles.sel} name="time_range" id="time_range" onChange={(e) => { setRange(e.target.value); }}>
+                    <option value="short_term">Short Term</option>
+                    <option value="medium_term">Medium Term</option>
+                    <option value="long_term">Long Term</option>
+                  </select>
+                </div>
               </div>
               <div className={styles.contentContainer}>
                 <div className={styles.artistsContainer}>
-                  <p>Top 10 Artists</p>
-                  {topArtists?.map((a) => (
-                    <div className={styles.artist} key={a.id}>
-                      <img
-                        className={styles.img}
-                        src={a.images[0].url}
-                        alt="Picture of the artist"
-                      />
-                      <p className={styles.name}>{a.name}</p>
-                    </div>
-                  ))}
+                  <p className={styles.title}>Top 10 Artists</p>
+                  <div className={styles.artistsContent}>
+                    {topArtists?.map((a) => (
+                      <div className={styles.artist} key={a.id}>
+                        <img
+                          className={styles.img}
+                          src={a.images[0].url}
+                          alt="Picture of the artist"
+                        />
+                        <Link href={a.external_urls.spotify}>
+                          <a>
+                            <p className={styles.name}>{a.name}</p>
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className={styles.tracksContainer}>
-                  <p>Top 10 Tracks</p>
-                  {topTracks?.map((a) => (
-                    <div className={styles.track} key={a.id}>
-                      <img
-                        className={styles.img}
-                        src={a.album.images[0].url}
-                        alt="Picture of the album"
-                      />
-                      <p className={styles.name}>{a.name}</p>
-                    </div>
-                  ))}
+                  <p className={styles.title}>Top 10 Tracks</p>
+                  <div className={styles.tracksContent}>
+                    {topTracks?.map((a) => (
+                      <div className={styles.track} key={a.id}>
+                        <img
+                          className={styles.img}
+                          src={a.album.images[0].url}
+                          alt="Picture of the album"
+                        />
+                        <Link href={a.external_urls.spotify}>
+                          <a>
+                            <p className={styles.name}>{a.name}</p>
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
+              <Footer />
             </div>
           </>
         )}

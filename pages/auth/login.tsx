@@ -1,4 +1,6 @@
 import { NextPage } from "next";
+import Footer from "../../components/footer";
+import Layout from "../../components/layout";
 import Head from "next/head";
 import styles from "../../styles/pages/auth/Login.module.css";
 import { useState } from "react";
@@ -21,30 +23,33 @@ const Login: NextPage = () => {
         <meta name="description" content="LogIn forms" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
-        <input
-          {...register("email")}
-          type="email"
-          name="email"
-          placeholder="E-mail"
-          required
-        />
-        <input
-          {...register("password")}
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        {error && (
-          <div className={styles.errorBox}>
-            {Object.values(error).map((e, i) => (
-              <p key={`error_${i}`}>{e[0]}</p>
-            ))}
-          </div>
-        )}
-        <button type="submit">LogIn</button>
-      </form>
+      <Layout>
+        <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
+          <input
+            {...register("email")}
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            required
+          />
+          <input
+            {...register("password")}
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          {error && (
+            <div className={styles.errorBox}>
+              {Object.values(error).map((e, i) => (
+                <p key={`error_${i}`}>{e[0]}</p>
+              ))}
+            </div>
+          )}
+          <button type="submit">LogIn</button>
+        </form>
+      </Layout>
+      <Footer />
     </div>
   );
 };
