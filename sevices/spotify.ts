@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 async function getToken(): Promise<string> {
   const { data: res } = await axios.get(
-    "https://spotifier-nicolasqueiroga.vercel.app/api/auth/session"
+    "https://spotifier-xi.vercel.app/api/auth/session"
   );
   const token = res.user.accessToken;
   return token;
