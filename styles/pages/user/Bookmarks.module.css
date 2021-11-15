@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .resultContainer {
@@ -35,6 +35,7 @@
 .artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
   width: 21.2vw;
   height: 51vh;
+  min-height: 212px;
   padding-top: 10px;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -87,8 +88,9 @@
 
 .clickHere {
   width: 100vw;
-  height: 13vh;
+  height: 70px;
   display: inline;
+  margin-top: 70px;
 }
 
 .name:hover {
