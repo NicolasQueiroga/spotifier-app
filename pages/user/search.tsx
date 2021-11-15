@@ -18,7 +18,6 @@ const Search = () => {
   const [expanded, setExpanded] = useState(false);
 
   const { "app.accessToken": accessToken } = parseCookies();
-  console.log("search ", accessToken);
 
   const [searchVal, setSearch] = useState<SearchProps>();
   const [searchText, setSearchText] = useState("");
