@@ -155,7 +155,8 @@ const Search = () => {
     maxHeight: none; 
     minHeight: none;
     flex-wrap: nowrap;
-    flex-direction: column;`;
+    flex-direction: column;
+    justify-content: flex-start;`;
 
     let ids2 = ["artists", "albums", "playlists", "tracks"];
     for (let k = 0; k < 4; k++) {
