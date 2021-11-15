@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 async function getToken(): Promise<string> {
   const { data: res } = await axios.get(
-    "http://localhost:3000/api/auth/session"
+    "https://spotifier-app.herokuapp.com/api/auth/session"
   );
   const token = res.user.accessToken;
   return token;
