@@ -3,7 +3,6 @@ import { useSession } from "next-auth/client";
 import Layout from "../../components/layout";
 import Head from "next/head";
 import Link from "next/link";
-import Footer from "../../components/footer";
 import styles from "../../styles/pages/user/Search.module.css";
 import { getSpotifyClient } from "../../sevices/spotify";
 import React, { useEffect, useState } from "react";
@@ -508,7 +507,6 @@ const Search = () => {
                 </div>
               </div>
             </div>
-            <Footer />
           </div>
         )}
       </Layout>

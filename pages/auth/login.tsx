@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import Footer from "../../components/footer";
 import Layout from "../../components/layout";
 import Head from "next/head";
 import styles from "../../styles/pages/auth/Login.module.css";
@@ -49,7 +48,6 @@ const Login: NextPage = () => {
           <button type="submit">LogIn</button>
         </form>
       </Layout>
-      <Footer />
     </div>
   );
 };

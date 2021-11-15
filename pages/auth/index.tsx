@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
-import Footer from "../../components/footer";
 import Link from "next/link";
 import styles from "../../styles/pages/auth/Auth.module.css";
 import { NextPage } from "next";
@@ -32,7 +31,6 @@ const Auth: NextPage = () => {
               </Link>
             </div>
           </div>
-          <Footer />
         </div>
       </Layout>
     </>

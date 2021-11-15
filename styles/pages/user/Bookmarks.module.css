@@ -6,6 +6,7 @@
 
 .container {
   width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,10 +32,7 @@
   align-items: center;
 }
 
-.artistsContainer,
-.albumsContainer,
-.playlistsContainer,
-.tracksContainer {
+.artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
   width: 21.2vw;
   height: 51vh;
   padding-top: 10px;
@@ -42,22 +40,15 @@
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border-radius: 7px;
   display: inherit;
-  background-image: linear-gradient(
-    to bottom,
-    rgb(215 215 215),
-    rgb(0 0 0 / 78%)
-  );
+  background-image: linear-gradient( to bottom, rgb(215 215 215), rgb(0 0 0 / 78%));
   transition: all 700ms;
   flex-wrap: wrap;
   flex-direction: row;
   align-content: flex-start;
-  justify-content: flex-start;
+  justify-content: space-evenly;
 }
 
-.artistsContainer:hover,
-.albumsContainer:hover,
-.playlistsContainer:hover,
-.tracksContainer:hover {
+.artistsContainer:hover, .albumsContainer:hover, .playlistsContainer:hover, .tracksContainer:hover {
   transform: scale(0.99);
 }
 
@@ -67,10 +58,7 @@
     align-items: center;
     height: 66vh;
   }
-  .artistsContainer,
-  .albumsContainer,
-  .playlistsContainer,
-  .tracksContainer {
+  .artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
     width: 90vw;
     height: 47vh;
     margin-top: 20px;
@@ -88,10 +76,7 @@
   display: unset;
 }
 
-.artists,
-.albums,
-.playlists,
-.tracks {
+.artists, .albums, .playlists, .tracks {
   margin: 0.9vh 0.5vw;
   -webkit-animation: fadein 1s;
   -moz-animation: fadein 1s;

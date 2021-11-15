@@ -1,4 +1,3 @@
-import Footer from "../../components/footer";
 import Layout from "../../components/layout";
 import Head from "next/head";
 import styles from "../../styles/pages/auth/Signup.module.css";
@@ -83,7 +82,6 @@ const Signup: NextPage = () => {
           <button type="submit">SignUp</button>
         </form>
       </Layout>
-      <Footer />
     </div>
   );
 };
