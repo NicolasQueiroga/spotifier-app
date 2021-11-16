@@ -212,6 +212,7 @@ const Search = () => {
                 className={styles.searchBar}
                 type="text"
                 value={searchText}
+                placeholder="Search"
                 onChange={onSearchTextChange}
                 onInput={showContent}
                 onClick={mainContent}

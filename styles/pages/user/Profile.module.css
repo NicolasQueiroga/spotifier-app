@@ -15,7 +15,6 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 70px;
-  margin-bottom: 40px;
 }
 
 .selContainer {
@@ -59,7 +58,13 @@
   display: flex;
   box-shadow: rgb(149 157 165 / 20%) 0px 8px 24px;
   border-radius: 7px;
-  background-image: linear-gradient( to bottom, rgb(215 215 215), rgb(0 0 0 / 78%));
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: all 700ms;
+}
+
+.artistsContent:hover, .tracksContent:hover {
+  transform: scale(0.99);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .img {
