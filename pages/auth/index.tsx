@@ -8,7 +8,7 @@ const Auth: NextPage = () => {
   return (
     <>
       <Head>
-        <title>LogIn</title>
+        <title>Bookmarks</title>
         <meta name="description" content="LogIn forms" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

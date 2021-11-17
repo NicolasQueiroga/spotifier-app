@@ -16,39 +16,41 @@ const Login: NextPage = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <Head>
-        <title>LogIn</title>
+        <title>Log In</title>
         <meta name="description" content="LogIn forms" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
-          <input
-            {...register("email")}
-            type="email"
-            name="email"
-            placeholder="E-mail"
-            required
-          />
-          <input
-            {...register("password")}
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-          />
-          {error && (
-            <div className={styles.errorBox}>
-              {Object.values(error).map((e, i) => (
-                <p key={`error_${i}`}>{e[0]}</p>
-              ))}
-            </div>
-          )}
-          <button type="submit">LogIn</button>
-        </form>
+        <div className={styles.container}>
+          <form className={styles.form} onSubmit={handleSubmit(handleSignIn)}>
+            <input
+              {...register("email")}
+              type="email"
+              name="email"
+              placeholder="E-mail"
+              required
+            />
+            <input
+              {...register("password")}
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+            {error && (
+              <div className={styles.errorBox}>
+                {Object.values(error).map((e, i) => (
+                  <p key={`error_${i}`}>{e[0]}</p>
+                ))}
+              </div>
+            )}
+            <button type="submit">LogIn</button>
+          </form>
+        </div>
       </Layout>
-    </div>
+    </>
   );
 };
 

@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .resultContainer {
@@ -35,12 +35,13 @@
 .artistsContainer, .albumsContainer, .playlistsContainer, .tracksContainer {
   width: 21.2vw;
   height: 51vh;
+  min-height: 212px;
   padding-top: 10px;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border-radius: 7px;
   display: inherit;
-  background-image: linear-gradient( to bottom, rgb(215 215 215), rgb(0 0 0 / 78%));
+  background-color: rgba(0, 0, 0, 0.1);
   transition: all 700ms;
   flex-wrap: wrap;
   flex-direction: row;
@@ -49,6 +50,7 @@
 }
 
 .artistsContainer:hover, .albumsContainer:hover, .playlistsContainer:hover, .tracksContainer:hover {
+  background-color: rgba(0, 0, 0, 0.2);
   transform: scale(0.99);
 }
 
@@ -87,8 +89,9 @@
 
 .clickHere {
   width: 100vw;
-  height: 13vh;
+  height: 70px;
   display: inline;
+  margin-top: 70px;
 }
 
 .name:hover {

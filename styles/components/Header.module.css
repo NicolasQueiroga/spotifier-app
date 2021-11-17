@@ -1,10 +1,14 @@
 .header {
   width: 100vw;
   height: 70px;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+  background-color: white;
 }
 
 .navbar {
