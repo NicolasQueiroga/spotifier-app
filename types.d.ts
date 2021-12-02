@@ -187,3 +187,12 @@ interface SignUpData extends SignInData {
   // state: string;
   // gender: string;
 }
+
+// pf
+
+interface AddProps {
+  description: string;
+  headline: string;
+  id: string;
+  img: string;
+}
