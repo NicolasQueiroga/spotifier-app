@@ -2,10 +2,10 @@ import axios, { AxiosInstance } from "axios";
 import { parseCookies } from "nookies";
 
 export function getAPIClient(ctx?: any): AxiosInstance {
-  const { "app.accessToken": accessToken } = parseCookies(ctx);
+  const { "api.accessToken": accessToken } = parseCookies(ctx);
 
   const api = axios.create({
-    baseURL: "http://ec2-3-137-174-177.us-east-2.compute.amazonaws.com",
+    baseURL: "http://0.0.0.0:8000",
   });
 
   api.interceptors.request.use((config) => {
